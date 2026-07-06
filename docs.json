@@ -2,6 +2,11 @@
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
   "name": "Whatmore Docs",
+  "logo": {
+    "light": "/logo/whatmore.png",
+    "dark": "/logo/whatmore.png"
+  },
+  "favicon": "/favicon.png",
   "colors": {
     "primary": "#0E7490",
     "light": "#22D3EE",

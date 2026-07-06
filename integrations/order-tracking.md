@@ -6,7 +6,7 @@ to the videos that drove them. This is a single authenticated call.
 ## Endpoint
 
 ```http
-POST /external-shop-order-tracking/private?store_id=<store_id>
+POST https://api.whatmore.live/external-shop-order-tracking/private?store_id=<store_id>
 Authorization: Bearer <access_token>
 Content-Type: application/json
 ```
@@ -29,8 +29,42 @@ Content-Type: application/json
 | ----- | ----- |
 | `order_id` | Your order identifier. Used for idempotency (see below). |
 | `order_items[]` | One entry per line item: `product_id`, `item_id`, `sku`, `price` (string), `quantity` (int), `currency`. |
-| `whatmore_video_view` | JSON-encoded **string** — a list of `{ product_id, widget_info }` from the [App SDK](app-sdk.md#the-integration-model) for products watched in a video. Defaults to `"[]"`. |
-| `whatmore_add_to_cart` | JSON-encoded **string** — same shape, for products added to cart from a video. Defaults to `"[]"`. |
+| `whatmore_video_view` | JSON-encoded **string** — a list of `{ product_id, widget_info }` for products watched in a video. On web, the widget stores this in `localStorage._whatmore_viewed_products`. Defaults to `"[]"`. |
+| `whatmore_add_to_cart` | JSON-encoded **string** — same shape, for products added to cart from a video. On web, stored in `localStorage._whatmore_add_to_cart_products`. Defaults to `"[]"`. |
+
+{% hint style="warning" %}
+The `product_id` you send in `order_items[]` **must be the same identifier your catalog uses
+for that product** (your `client_product_id`) — otherwise the item can't be matched to the
+video signal.
+{% endhint %}
+
+## Ready-to-use snippet (web)
+
+On a web storefront the video widget records viewed / added-to-cart products into
+`localStorage`. Call this once on your order-confirmation page — it reads those signals and
+reports the order:
+
+```javascript
+async function sendOrderTrackingRequest({ orderId, orderItems, storeId, token }) {
+  const url = `https://api.whatmore.live/external-shop-order-tracking/private?store_id=${encodeURIComponent(storeId)}`;
+  const payload = {
+    order_id: orderId,
+    order_items: orderItems,
+    whatmore_video_view: localStorage._whatmore_viewed_products || "[]",
+    whatmore_add_to_cart: localStorage._whatmore_add_to_cart_products || "[]",
+  };
+  const res = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) throw new Error(`Order tracking failed: ${res.status} ${res.statusText}`);
+  return res;
+}
+```
+
+Build `orderItems` from your order (`product_id`, `item_id`, `sku`, `price`, `quantity`,
+`currency` per line), then call `sendOrderTrackingRequest({ orderId, orderItems, storeId, token })`.
 
 ## How attribution works
 

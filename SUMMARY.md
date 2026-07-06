@@ -1,21 +1,16 @@
 # Table of contents
 
-* [Whatmore Integrations](README.md)
-* [Getting Started](getting-started.md)
+* [Whatmore Documentation](README.md)
 
-## Integration Tracks
+## Non-Shopify Integrations
 
-* [Part 1 — App SDK](app-sdk.md)
-* [Part 2 — Authentication](authentication.md)
-* [Part 3 — API Integrations](api-integrations.md)
-  * [Catalog API](catalog-api.md)
-  * [Order Tracking](order-tracking.md)
-
-## Platform Guides
-
-* [Magento / Adobe Commerce](magento.md)
-* [Salesforce Commerce Cloud](salesforce-commerce-cloud.md)
-
-## Reference
-
-* [Backend Questions & Clarifications](faq.md)
+* [Overview](non-shopify-integrations/README.md)
+* [Getting Started](non-shopify-integrations/getting-started.md)
+* [Part 1 — App SDK](non-shopify-integrations/app-sdk.md)
+* [Part 2 — Authentication](non-shopify-integrations/authentication.md)
+* [Part 3 — API Integrations](non-shopify-integrations/api-integrations.md)
+  * [Catalog API](non-shopify-integrations/catalog-api.md)
+  * [Order Tracking](non-shopify-integrations/order-tracking.md)
+* [Magento / Adobe Commerce](non-shopify-integrations/magento.md)
+* [Salesforce Commerce Cloud](non-shopify-integrations/salesforce-commerce-cloud.md)
+* [Backend Questions & Clarifications](non-shopify-integrations/faq.md)

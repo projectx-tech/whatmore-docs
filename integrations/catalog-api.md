@@ -1,18 +1,60 @@
 # Catalog API
 
-You sync your products **to** Whatmore so videos can be made shoppable. You add products
-once, then keep price and stock current with lightweight update calls. All calls use a
-[bearer token](authentication.md).
+Whatmore needs your product data (title, price, stock, image) to make videos shoppable.
+There are two ways to provide it:
+
+- **[Connect in the dashboard](#connect-in-the-dashboard-recommended)** *(recommended, no
+  code)* — point Whatmore at your product API and map fields; Whatmore pulls the data for you.
+- **[Catalog API](#catalog-api-automation)** *(automation)* — push products directly with the
+  endpoints below.
+
+Either way, Whatmore stores the data and keeps it fresh. Video upload and product tagging
+happen in the dashboard.
+
+## Connect in the dashboard (recommended)
+
+In [dashboard.whatmore.live](https://dashboard.whatmore.live), choose your platform and
+provide your **product API** — an endpoint that returns a single product's detail, plus any
+auth it needs. Whatmore fetches a sample response and you **map your fields** to Whatmore's:
+
+| Whatmore field | Typical source field |
+| -------------- | -------------------- |
+| Product title | `name` / `title` |
+| Product ID / SKU (`client_product_id`) | `id` |
+| Price | `price` |
+| Compare-at / MRP (`compare_price`) | `regular_price` |
+| Product URL (`product_link`) | `permalink` |
+| Product image (`thumbnail_image`) | `images[0].src` |
+| Currency | set manually |
+
+Whatmore then pulls product data using this mapping — no code to write. See your platform
+guide for the exact endpoint and credentials:
+[WooCommerce](platform-woocommerce.md) · [Custom / headless](platform-custom.md) ·
+[Magento](platform-magento.md) · [SFCC](platform-sfcc.md) · [BigCommerce](platform-bigcommerce.md).
 
 ## Product identity
 
-- **`client_product_id`** — *your* product identifier, and the key you use on every call.
-  It is commonly the **product URL**, which keeps Whatmore aligned with the same URL used
-  to tag products to videos (no separate mapping layer).
+- **`client_product_id`** — *your* product identifier, and the key you use on every call and
+  in [order tracking](order-tracking.md). It is commonly the **product URL**, which keeps
+  Whatmore aligned with the same URL used to tag products to videos (no separate mapping
+  layer).
 - **`product_link`** — the product's URL.
 - Whatmore also assigns its own internal numeric `product_id`, returned in responses.
 
-## Add a product
+{% hint style="info" %}
+**Video & media are managed in the Whatmore dashboard — there is no upload API to
+integrate.** You upload, trim, and tag videos in the dashboard; your only catalog job is
+making product data available. This is deliberate: less to build on your side, faster
+go-live.
+{% endhint %}
+
+## Catalog API (automation)
+
+Prefer to push products yourself instead of the dashboard connect? Use these authenticated
+endpoints. All calls use a [bearer token](authentication.md); the base URL is
+`https://api.whatmore.live`.
+
+### Add a product
 
 ```http
 POST /product
@@ -40,7 +82,7 @@ Content-Type: application/json
 - `price` and `compare_price` are strings; `compare_price` is the strike-through / MRP.
 - `product_metadata` is a free-form object for `sku`, `variant_id`, etc.
 
-## Bulk import (large catalogs)
+### Bulk import (large catalogs)
 
 For a large catalog you don't build a payload per product — just hand Whatmore a list of
 product **URLs** and it ingests them:
@@ -62,16 +104,9 @@ Content-Type: application/json
 ```
 
 Whatmore fetches and stores each product from its URL. Use `POST /product-variants/upload/bulk`
-(same body) to bulk-import variants. This is the fastest path to a live catalog.
+(same body) to bulk-import variants.
 
-{% hint style="info" %}
-**Video & media are managed in the Whatmore dashboard — there is no upload API to
-integrate.** You upload, trim, and tag videos in the dashboard; your only catalog job is
-making product data available (single, update, or bulk-by-URL above). This is deliberate:
-less to build on your side, faster go-live.
-{% endhint %}
-
-## Update price and stock
+### Update price and stock
 
 Keep products fresh by updating them by your own `client_product_id` — no need to know
 Whatmore's internal id:
@@ -95,7 +130,7 @@ Content-Type: application/json
 Send this whenever price or inventory changes so tagged products stay accurate. Setting
 `inventory` to `0` marks the product out of stock.
 
-## Fetch a product
+### Fetch a product
 
 ```http
 GET /events/product/{client_product_id}
@@ -121,9 +156,3 @@ Returns the stored product:
 ```
 
 To list all products for a store: `GET /brand/{store_id}/products`.
-
-{% hint style="info" %}
-Variant- and SKU-level data is carried in `product_metadata`. If you need bulk product
-import for a large catalog, that is available — the exact bulk format is confirmed during
-onboarding.
-{% endhint %}

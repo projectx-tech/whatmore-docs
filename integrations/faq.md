@@ -2,11 +2,16 @@
 
 Answers to the questions backend teams most commonly raise.
 
-## 1. Product data — when is it read?
+## 1. How does Whatmore get my product data?
 
-Whatmore stores your product data (you sync it via the [Catalog API](catalog-api.md)) and
-serves it to the video surfaces. You do **not** host a product API for Whatmore to call.
-Products render from Whatmore's stored copy, which you keep current with `PUT /v1/product`.
+Two ways (see [Catalog API](catalog-api.md)):
+
+- **Dashboard connect (recommended):** you give Whatmore your product API endpoint +
+  credentials and map fields in the dashboard; Whatmore **pulls** product data for you.
+- **Catalog API (automation):** you **push** products with `POST /product` /
+  `POST /product/upload/bulk` and keep them fresh with `PUT /v1/product`.
+
+Either way Whatmore stores the data and serves it to the surfaces.
 
 **What fields does a product have?** `client_product_id`, `product_link`, `title`,
 `description`, `price`, `compare_price`, `currency`, `thumbnail_image`, `product_status`,
@@ -15,12 +20,11 @@ plus `product_metadata` for `sku` / `variant_id`. See the
 
 ## 2. Catalog synchronization
 
-**How do products sync?** You push them to Whatmore:
-
-- **Initial load / add:** `POST /product` per product, or bulk-by-URL via
-  [`POST /product/upload/bulk`](catalog-api.md#bulk-import-large-catalogs) for large catalogs.
-- **Incremental updates:** `PUT /v1/product` by `client_product_id` — send it whenever
-  price or inventory changes.
+- **Connect / initial load:** point Whatmore at your product API in the dashboard, or push
+  with `POST /product` / bulk-by-URL
+  [`POST /product/upload/bulk`](catalog-api.md#bulk-import-large-catalogs).
+- **Incremental updates:** on the dashboard connect Whatmore re-reads your API; on the push
+  path, send `PUT /v1/product` by `client_product_id` when price or inventory changes.
 - **Fetch / verify:** `GET /events/product/{client_product_id}`, or list with
   `GET /brand/{store_id}/products`.
 

@@ -1,44 +1,48 @@
 # Salesforce Commerce Cloud (SFCC)
 
-How an SFCC (B2C Commerce) store — SFRA or headless PWA Kit — fulfils the three
-[integration tracks](README.md). The APIs are identical to any
-non-Shopify store; this page maps them onto SFCC specifics.
+How an SFCC (B2C Commerce) store — SFRA or headless PWA Kit — integrates Whatmore. The
+building blocks are the same as any non-Shopify store; this page maps them onto SFCC.
 
-## 1. App SDK — embed the surfaces
+## 1. Connect your catalog
 
-- **SFRA:** include the Whatmore web widget via an ISML
-  template (PDP, homepage), optionally packaged as a small **cartridge**.
-- **PWA Kit / headless:** mount the SDK component in your React storefront.
+Whatmore reads your products through the SFCC Shopper Products API (SCAPI / OCAPI) and you
+map the fields in the dashboard. Your product endpoint is typically:
 
-```html
-<div id="whatmore-carousel" data-brand-id="YOUR_BRAND_ID"></div>
-<script src="https://cdn.whatmore.ai/sdk.js" async></script>
+```bash
+curl "https://yourinstance.commercecloud.salesforce.com/.../products/PRODUCT_ID" \
+  -H "Authorization: Bearer <sfcc_access_token>"
 ```
 
-The SDK emits the video-view / add-to-cart signals your order code forwards at checkout.
+In [dashboard.whatmore.live](https://dashboard.whatmore.live) select **Salesforce Commerce
+Cloud**, enter the endpoint + token, and map fields to Whatmore's (title,
+`client_product_id`, price, compare-at, product URL, image) — see
+[Catalog API → Connect in the dashboard](catalog-api.md#connect-in-the-dashboard-recommended).
+*(Prefer to push? Use the [Catalog API](catalog-api.md#catalog-api-automation).)*
 
-## 2. Authentication
+## 2. Embed the widget
 
-Fetch a bearer token from `GET /auth/access-token?store_id=<store_id>` server-side (store
-credentials in SFCC service config). See [Authentication](authentication.md).
+In the dashboard, set up a surface, choose a template, and **copy the generated snippet**:
 
-## 3a. Catalog sync (push products to Whatmore)
+- **SFRA:** paste it into an ISML template (PDP, homepage), optionally packaged as a small
+  **cartridge**.
+- **PWA Kit / headless:** mount it in your React storefront.
 
-Map SFCC product data onto the [Catalog API](catalog-api.md):
+The snippet is generated for your store — no hardcoded script URL.
 
-- From a catalog job or product hook → `POST /product` with `product_link`,
-  `client_product_id` (your SFCC product id or URL), `price`, `compare_price`, `currency`,
-  `title`, `thumbnail_image`, and `product_metadata` (`sku`, `variant_id`).
-- On price/inventory change → `PUT /v1/product` with the new `price` / `inventory`.
+## 3. Authentication
 
-## 3b. Order tracking
+For order tracking, fetch a bearer token from `GET /auth/access-token?store_id=<store_id>`
+server-side (store credentials in SFCC service config). See
+[Authentication](authentication.md).
 
-On order confirmation, call
-[`POST /external-shop-order-tracking/private`](order-tracking.md) with the order items and
-the `whatmore_video_view` / `whatmore_add_to_cart` signals carried from the SDK.
+## 4. Order tracking
+
+On order confirmation, call [Order Tracking](order-tracking.md) with the order items. The web
+widget stores video-view / add-to-cart signals in `localStorage`, so the
+[ready-to-use snippet](order-tracking.md#ready-to-use-snippet-web) picks them up.
 
 ## Verify
 
-- Surfaces render in SFRA/PWA and SDK signals reach your order code
-- Products appear in Whatmore (`GET /events/product/{client_product_id}`)
+- Products resolve in Whatmore (`GET /events/product/{client_product_id}`)
+- Widget renders from the pasted snippet
 - Order tracking fires on confirmation and attribution shows in the dashboard

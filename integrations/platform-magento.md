@@ -1,44 +1,46 @@
 # Magento / Adobe Commerce
 
-How a Magento 2 / Adobe Commerce store fulfils the three
-[integration tracks](README.md). The APIs are the same for any
-non-Shopify store — this page maps them onto Magento specifics.
+How a Magento 2 / Adobe Commerce store integrates Whatmore — connect your catalog, embed the
+widget, and report orders. The building blocks are the same as any non-Shopify store; this
+page maps them onto Magento.
 
-## 1. App SDK — embed the surfaces
+## 1. Connect your catalog
 
-Add the Whatmore web widget via a custom `.phtml` template or
-CMS block where you want each surface (PDP, homepage, category). The SDK emits the
-video-view / add-to-cart signals your order code will forward at checkout.
+Whatmore reads your products through Magento's REST API and you map the fields in the
+dashboard. Your product endpoint is typically:
 
-```html
-<div id="whatmore-carousel" data-brand-id="YOUR_BRAND_ID"></div>
-<script src="https://cdn.whatmore.ai/sdk.js" async></script>
+```bash
+curl https://yourstore.com/rest/V1/products/SKU \
+  -H "Authorization: Bearer <magento_integration_token>"
 ```
 
-## 2. Authentication
+In [dashboard.whatmore.live](https://dashboard.whatmore.live) select **Magento**, enter the
+endpoint + token, and map fields to Whatmore's (title, `client_product_id`, price,
+compare-at, product URL, image) — see
+[Catalog API → Connect in the dashboard](catalog-api.md#connect-in-the-dashboard-recommended).
+*(Prefer to push? Use the [Catalog API](catalog-api.md#catalog-api-automation).)*
 
-Fetch a bearer token from `GET /auth/access-token?store_id=<store_id>` server-side (store
-`store_id`/token in Magento secure config). See [Authentication](authentication.md).
+## 2. Embed the widget
 
-## 3a. Catalog sync (push products to Whatmore)
+In the dashboard, set up a surface, choose a template, and **copy the generated snippet**.
+Paste it into a custom `.phtml` template or a CMS block where you want the surface (PDP,
+homepage, category). The snippet is generated for your store — no hardcoded script URL.
 
-Map Magento catalog data onto the [Catalog API](catalog-api.md):
+## 3. Authentication
 
-- On product save/import → `POST /product` with `product_link`, `client_product_id` (your
-  Magento product id or URL), `price`, `compare_price`, `currency`, `title`,
-  `thumbnail_image`, and `product_metadata` (`sku`, `variant_id`).
-- On price/stock change (Magento events or indexer hooks) → `PUT /v1/product` with the new
-  `price` / `inventory`.
+For order tracking, fetch a bearer token from `GET /auth/access-token?store_id=<store_id>`
+server-side (store `store_id` / token in Magento secure config). See
+[Authentication](authentication.md).
 
-## 3b. Order tracking
+## 4. Order tracking
 
-On order placement (e.g. `checkout_submit_all_after` / order success), call
-[`POST /external-shop-order-tracking/private`](order-tracking.md) with the order items and
-the `whatmore_video_view` / `whatmore_add_to_cart` signals carried from the SDK through
-checkout.
+On order placement (e.g. `checkout_submit_all_after` / the order-success page), call
+[Order Tracking](order-tracking.md) with the order items. The web widget stores video-view /
+add-to-cart signals in `localStorage`, so the
+[ready-to-use snippet](order-tracking.md#ready-to-use-snippet-web) picks them up.
 
 ## Verify
 
-- Surfaces render and the SDK signals reach your order code
-- Products appear in Whatmore (`GET /events/product/{client_product_id}`)
+- Products resolve in Whatmore (`GET /events/product/{client_product_id}`)
+- Widget renders from the pasted snippet
 - Order tracking fires on the success page and attribution shows in the dashboard

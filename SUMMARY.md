@@ -27,6 +27,7 @@
 * [Salesforce Commerce Cloud](integrations/platform-sfcc.md)
 * [WooCommerce](integrations/platform-woocommerce.md)
 * [BigCommerce](integrations/platform-bigcommerce.md)
+* [Custom / Headless](integrations/platform-custom.md)
 
 ## Reference
 

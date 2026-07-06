@@ -1,4 +1,6 @@
-# Order Tracking
+---
+title: "Order Tracking"
+---
 
 When an order completes, your backend reports it to Whatmore so purchases can be attributed
 to the videos that drove them. This is a single authenticated call.
@@ -32,11 +34,11 @@ Content-Type: application/json
 | `whatmore_video_view` | JSON-encoded **string** — a list of `{ product_id, widget_info }` for products watched in a video. On web, the widget stores this in `localStorage._whatmore_viewed_products`. Defaults to `"[]"`. |
 | `whatmore_add_to_cart` | JSON-encoded **string** — same shape, for products added to cart from a video. On web, stored in `localStorage._whatmore_add_to_cart_products`. Defaults to `"[]"`. |
 
-{% hint style="warning" %}
+<Warning>
 The `product_id` you send in `order_items[]` **must be the same identifier your catalog uses
 for that product** (your `client_product_id`) — otherwise the item can't be matched to the
 video signal.
-{% endhint %}
+</Warning>
 
 ## Ready-to-use snippet (web)
 
@@ -82,11 +84,11 @@ Build `orderItems` from your order (`product_id`, `item_id`, `sku`, `price`, `qu
 - This makes retries safe: re-sending the same `order_id` after a network failure cannot
   create a duplicate. Use a stable `order_id` and treat the duplicate response as success.
 
-{% hint style="info" %}
+<Info>
 Send one tracking call per completed order. The `whatmore_video_view` / `whatmore_add_to_cart`
 strings are produced by the App SDK and passed through your checkout — see
-[App SDK → attribution](app-sdk.md#the-integration-model).
-{% endhint %}
+[App SDK → attribution](/integrations/app-sdk#the-integration-model).
+</Info>
 
 ## Cart tracking *(optional)*
 

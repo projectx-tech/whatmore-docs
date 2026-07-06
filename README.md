@@ -5,7 +5,7 @@ platform into your storefront — native mobile apps, custom / headless sites, a
 commerce platforms (Shopify, Magento / Adobe Commerce, Salesforce Commerce Cloud,
 WooCommerce, BigCommerce).
 
-Start with the **[Integration Overview](integrations/README.md)**, or jump to your platform
+Start with the **[Integration Overview](integrations/overview.md)**, or jump to your platform
 or SDK from the navigation.
 
 - **App SDK** — [iOS](integrations/sdk-ios.md) · [React Native](integrations/sdk-react-native.md) · [Android](integrations/sdk-android.md)

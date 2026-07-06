@@ -1,10 +1,12 @@
-# Backend Questions & Clarifications
+---
+title: "Backend Questions & Clarifications"
+---
 
 Answers to the questions backend teams most commonly raise.
 
 ## 1. How does Whatmore get my product data?
 
-Two ways (see [Catalog API](catalog-api.md)):
+Two ways (see [Catalog API](/integrations/catalog-api)):
 
 - **Dashboard connect (recommended):** you give Whatmore your product API endpoint +
   credentials and map fields in the dashboard; Whatmore **pulls** product data for you.
@@ -16,13 +18,13 @@ Either way Whatmore stores the data and serves it to the surfaces.
 **What fields does a product have?** `client_product_id`, `product_link`, `title`,
 `description`, `price`, `compare_price`, `currency`, `thumbnail_image`, `product_status`,
 plus `product_metadata` for `sku` / `variant_id`. See the
-[Catalog API response](catalog-api.md#fetch-a-product).
+[Catalog API response](/integrations/catalog-api#fetch-a-product).
 
 ## 2. Catalog synchronization
 
 - **Connect / initial load:** point Whatmore at your product API in the dashboard, or push
   with `POST /product` / bulk-by-URL
-  [`POST /product/upload/bulk`](catalog-api.md#bulk-import-large-catalogs).
+  [`POST /product/upload/bulk`](/integrations/catalog-api#bulk-import-large-catalogs).
 - **Incremental updates:** on the dashboard connect Whatmore re-reads your API; on the push
   path, send `PUT /v1/product` by `client_product_id` when price or inventory changes.
 - **Fetch / verify:** `GET /events/product/{client_product_id}`, or list with
@@ -37,12 +39,12 @@ upload API to build.**
 Single-product fetch (`GET /events/product/{client_product_id}`) and a per-store list
 (`GET /brand/{store_id}/products`) are available. For large catalogs, bulk import takes a
 list of product URLs — see
-[Bulk import](catalog-api.md#bulk-import-large-catalogs).
+[Bulk import](/integrations/catalog-api#bulk-import-large-catalogs).
 
 ## 4. Order tracking / "webhooks"
 
 Order data is **pushed by you** to `POST /external-shop-order-tracking/private` on order
-completion — see [Order Tracking](order-tracking.md). Key semantics:
+completion — see [Order Tracking](/integrations/order-tracking). Key semantics:
 
 - **Idempotency:** orders are de-duplicated by `order_id`; a repeat is rejected
   (`Order Id already exists`), never double-counted — so retries are safe.
@@ -52,13 +54,13 @@ completion — see [Order Tracking](order-tracking.md). Key semantics:
 ## 5. API Contracts
 
 Concrete request/response examples for every endpoint are on the
-[Catalog API](catalog-api.md) and [Order Tracking](order-tracking.md) pages. A formal
+[Catalog API](/integrations/catalog-api) and [Order Tracking](/integrations/order-tracking) pages. A formal
 OpenAPI/Swagger export can be provided on request.
 
 ## 6. Security
 
 - **Authentication:** all calls use a bearer access token obtained from
-  `GET /auth/access-token` with your `store_id` — see [Authentication](authentication.md).
+  `GET /auth/access-token` with your `store_id` — see [Authentication](/integrations/authentication).
 - **Environment separation:** production and staging issue separate `store_id`s and tokens.
 - **Token handling:** keep the token server-side; the App SDK uses only the public Brand ID.
 

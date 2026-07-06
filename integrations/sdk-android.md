@@ -1,14 +1,16 @@
-# Android SDK (Kotlin)
+---
+title: "Android SDK (Kotlin)"
+---
 
-{% hint style="warning" %}
+<Warning>
 **Planned.** The native Android (Kotlin) SDK is on the roadmap. This page documents the
 intended interface so Android teams can plan; it is confirmed and updated when the SDK
 ships.
-{% endhint %}
+</Warning>
 
 ## What to expect
 
-The Android SDK will mirror the [iOS SDK](sdk-ios.md) model so the integration is consistent
+The Android SDK will mirror the [iOS SDK](/integrations/sdk-ios) model so the integration is consistent
 across platforms:
 
 - The same **surfaces** — Reel (full-screen swipe), Feed (creator page), Carousel
@@ -36,7 +38,7 @@ WhatmoreReelsView(context).apply {
 ```
 
 For attribution, capture the product / event from the listener callbacks and include them on
-your [Order Tracking](order-tracking.md) call at checkout — same as iOS and React Native.
+your [Order Tracking](/integrations/order-tracking) call at checkout — same as iOS and React Native.
 
 Until this ships, Android apps can integrate via the
-[React Native SDK](sdk-react-native.md) where a React Native layer is available.
+[React Native SDK](/integrations/sdk-react-native) where a React Native layer is available.

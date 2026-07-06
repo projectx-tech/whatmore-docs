@@ -1,4 +1,6 @@
-# Authentication
+---
+title: "Authentication"
+---
 
 Whatmore's integration APIs are called by **your** backend and authenticated with a
 **bearer token**. You obtain the token from Whatmore using your `store_id`, then send it on
@@ -39,10 +41,10 @@ live data.
 | Credential | Used for |
 | ---------- | -------- |
 | `store_id` | Identifies your store; used to fetch a token and on every call |
-| `brand` / Brand ID | Used by the [App SDK](app-sdk.md) to render your surfaces |
+| `brand` / Brand ID | Used by the [App SDK](/integrations/app-sdk) to render your surfaces |
 | Access token | Bearer auth on Catalog + Order Tracking APIs |
 
-{% hint style="info" %}
+<Info>
 Keep the `store_id` and access token **server-side**. The App SDK uses only the public
 Brand ID — never embed the token in client or mobile app code.
-{% endhint %}
+</Info>

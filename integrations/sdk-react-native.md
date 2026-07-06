@@ -1,13 +1,15 @@
-# React Native SDK
+---
+title: "React Native SDK"
+---
 
 `@whatmore-repo/whatmore-reactnative-sdk` — shoppable video for React Native apps. Renders
 **native** views (not a WebView); your app owns the cart and navigation via a callbacks
 object.
 
-{% hint style="info" %}
+<Info>
 Current interface — the SDK is being rebuilt and ships without TypeScript types today, so
 the signatures below are the reference shape and may change.
-{% endhint %}
+</Info>
 
 ## Install
 
@@ -70,10 +72,10 @@ type WhatmoreCommandsObject = {
 | `addToCart` | add-to-cart is tapped | `(variantId, quantity)` |
 
 For **attribution**, record the product handle / variant from these callbacks and include
-them on your [Order Tracking](order-tracking.md) call at checkout.
+them on your [Order Tracking](/integrations/order-tracking) call at checkout.
 
-{% hint style="info" %}
+<Info>
 The SDK fetches its own event feed from Whatmore using `shopId`; you do not pass video data
 in. Product detail is resolved from your store. Exact `template` values and additional
 `domainContext` wiring are confirmed at onboarding.
-{% endhint %}
+</Info>

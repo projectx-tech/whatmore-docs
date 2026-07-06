@@ -1,4 +1,6 @@
-# Salesforce Commerce Cloud (SFCC)
+---
+title: "Salesforce Commerce Cloud (SFCC)"
+---
 
 How an SFCC (B2C Commerce) store — SFRA or headless PWA Kit — integrates Whatmore. The
 building blocks are the same as any non-Shopify store; this page maps them onto SFCC.
@@ -16,8 +18,8 @@ curl "https://yourinstance.commercecloud.salesforce.com/.../products/PRODUCT_ID"
 In [dashboard.whatmore.live](https://dashboard.whatmore.live) select **Salesforce Commerce
 Cloud**, enter the endpoint + token, and map fields to Whatmore's (title,
 `client_product_id`, price, compare-at, product URL, image) — see
-[Catalog API → Connect in the dashboard](catalog-api.md#connect-in-the-dashboard-recommended).
-*(Prefer to push? Use the [Catalog API](catalog-api.md#catalog-api-automation).)*
+[Catalog API → Connect in the dashboard](/integrations/catalog-api#connect-in-the-dashboard-recommended).
+*(Prefer to push? Use the [Catalog API](/integrations/catalog-api#catalog-api-automation).)*
 
 ## 2. Embed the widget
 
@@ -33,13 +35,13 @@ The snippet is generated for your store — no hardcoded script URL.
 
 For order tracking, fetch a bearer token from `GET /auth/access-token?store_id=<store_id>`
 server-side (store credentials in SFCC service config). See
-[Authentication](authentication.md).
+[Authentication](/integrations/authentication).
 
 ## 4. Order tracking
 
-On order confirmation, call [Order Tracking](order-tracking.md) with the order items. The web
+On order confirmation, call [Order Tracking](/integrations/order-tracking) with the order items. The web
 widget stores video-view / add-to-cart signals in `localStorage`, so the
-[ready-to-use snippet](order-tracking.md#ready-to-use-snippet-web) picks them up.
+[ready-to-use snippet](/integrations/order-tracking#ready-to-use-snippet-web) picks them up.
 
 ## Verify
 

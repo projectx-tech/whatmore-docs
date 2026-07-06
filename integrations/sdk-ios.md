@@ -1,12 +1,14 @@
-# iOS SDK (Swift)
+---
+title: "iOS SDK (Swift)"
+---
 
 `WhatmoreReels` — drop-in shoppable video for iOS. One Swift Package, three ready-to-embed
 templates (Reel, Feed, Carousel) that share the same configuration and delegate. SwiftUI +
 AVFoundation, no third-party dependencies; works in both UIKit and SwiftUI hosts.
 
-{% hint style="info" %}
+<Info>
 Current interface — the SDK is being rebuilt. Signatures may change.
-{% endhint %}
+</Info>
 
 ## Requirements
 
@@ -122,7 +124,7 @@ final class AppWhatmoreHandler: WhatmoreReelsDelegate {
 ```
 
 For **attribution**, record the `product.id` / `event.eventID` from these callbacks and
-include them on your [Order Tracking](order-tracking.md) call at checkout.
+include them on your [Order Tracking](/integrations/order-tracking) call at checkout.
 
 ## Models
 

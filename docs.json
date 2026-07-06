@@ -1,0 +1,55 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Whatmore Docs",
+  "colors": {
+    "primary": "#0E7490",
+    "light": "#22D3EE",
+    "dark": "#0E7490"
+  },
+  "navigation": {
+    "groups": [
+      {
+        "group": "Get Started",
+        "pages": [
+          "integrations/overview",
+          "integrations/getting-started"
+        ]
+      },
+      {
+        "group": "App SDK",
+        "pages": [
+          "integrations/app-sdk",
+          "integrations/sdk-ios",
+          "integrations/sdk-react-native",
+          "integrations/sdk-android"
+        ]
+      },
+      {
+        "group": "Core APIs",
+        "pages": [
+          "integrations/authentication",
+          "integrations/catalog-api",
+          "integrations/order-tracking"
+        ]
+      },
+      {
+        "group": "Platform Guides",
+        "pages": [
+          "integrations/platform-shopify",
+          "integrations/platform-magento",
+          "integrations/platform-sfcc",
+          "integrations/platform-woocommerce",
+          "integrations/platform-bigcommerce",
+          "integrations/platform-custom"
+        ]
+      },
+      {
+        "group": "Reference",
+        "pages": [
+          "integrations/faq"
+        ]
+      }
+    ]
+  }
+}

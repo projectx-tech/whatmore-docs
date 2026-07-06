@@ -1,4 +1,6 @@
-# Catalog API
+---
+title: "Catalog API"
+---
 
 Whatmore needs your product data (title, price, stock, image) to make videos shoppable.
 There are two ways to provide it:
@@ -29,29 +31,29 @@ auth it needs. Whatmore fetches a sample response and you **map your fields** to
 
 Whatmore then pulls product data using this mapping — no code to write. See your platform
 guide for the exact endpoint and credentials:
-[WooCommerce](platform-woocommerce.md) · [Custom / headless](platform-custom.md) ·
-[Magento](platform-magento.md) · [SFCC](platform-sfcc.md) · [BigCommerce](platform-bigcommerce.md).
+[WooCommerce](/integrations/platform-woocommerce) · [Custom / headless](/integrations/platform-custom) ·
+[Magento](/integrations/platform-magento) · [SFCC](/integrations/platform-sfcc) · [BigCommerce](/integrations/platform-bigcommerce).
 
 ## Product identity
 
 - **`client_product_id`** — *your* product identifier, and the key you use on every call and
-  in [order tracking](order-tracking.md). It is commonly the **product URL**, which keeps
+  in [order tracking](/integrations/order-tracking). It is commonly the **product URL**, which keeps
   Whatmore aligned with the same URL used to tag products to videos (no separate mapping
   layer).
 - **`product_link`** — the product's URL.
 - Whatmore also assigns its own internal numeric `product_id`, returned in responses.
 
-{% hint style="info" %}
+<Info>
 **Video & media are managed in the Whatmore dashboard — there is no upload API to
 integrate.** You upload, trim, and tag videos in the dashboard; your only catalog job is
 making product data available. This is deliberate: less to build on your side, faster
 go-live.
-{% endhint %}
+</Info>
 
 ## Catalog API (automation)
 
 Prefer to push products yourself instead of the dashboard connect? Use these authenticated
-endpoints. All calls use a [bearer token](authentication.md); the base URL is
+endpoints. All calls use a [bearer token](/integrations/authentication); the base URL is
 `https://api.whatmore.live`.
 
 ### Add a product

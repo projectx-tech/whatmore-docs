@@ -1,4 +1,6 @@
-# Magento / Adobe Commerce
+---
+title: "Magento / Adobe Commerce"
+---
 
 How a Magento 2 / Adobe Commerce store integrates Whatmore — connect your catalog, embed the
 widget, and report orders. The building blocks are the same as any non-Shopify store; this
@@ -17,8 +19,8 @@ curl https://yourstore.com/rest/V1/products/SKU \
 In [dashboard.whatmore.live](https://dashboard.whatmore.live) select **Magento**, enter the
 endpoint + token, and map fields to Whatmore's (title, `client_product_id`, price,
 compare-at, product URL, image) — see
-[Catalog API → Connect in the dashboard](catalog-api.md#connect-in-the-dashboard-recommended).
-*(Prefer to push? Use the [Catalog API](catalog-api.md#catalog-api-automation).)*
+[Catalog API → Connect in the dashboard](/integrations/catalog-api#connect-in-the-dashboard-recommended).
+*(Prefer to push? Use the [Catalog API](/integrations/catalog-api#catalog-api-automation).)*
 
 ## 2. Embed the widget
 
@@ -30,14 +32,14 @@ homepage, category). The snippet is generated for your store — no hardcoded sc
 
 For order tracking, fetch a bearer token from `GET /auth/access-token?store_id=<store_id>`
 server-side (store `store_id` / token in Magento secure config). See
-[Authentication](authentication.md).
+[Authentication](/integrations/authentication).
 
 ## 4. Order tracking
 
 On order placement (e.g. `checkout_submit_all_after` / the order-success page), call
-[Order Tracking](order-tracking.md) with the order items. The web widget stores video-view /
+[Order Tracking](/integrations/order-tracking) with the order items. The web widget stores video-view /
 add-to-cart signals in `localStorage`, so the
-[ready-to-use snippet](order-tracking.md#ready-to-use-snippet-web) picks them up.
+[ready-to-use snippet](/integrations/order-tracking#ready-to-use-snippet-web) picks them up.
 
 ## Verify
 

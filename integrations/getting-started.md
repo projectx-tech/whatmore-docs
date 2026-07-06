@@ -1,4 +1,6 @@
-# Getting Started
+---
+title: "Getting Started"
+---
 
 Prerequisites and a checklist for integrating a non-Shopify storefront with Whatmore.
 
@@ -7,11 +9,11 @@ Prerequisites and a checklist for integrating a non-Shopify storefront with What
 Your Whatmore contact provisions your store and issues:
 
 - A **`store_id`** — identifies your store; used to get an access token and on every API call.
-- A **Brand ID** — used by the [App SDK](app-sdk.md) to render your surfaces.
+- A **Brand ID** — used by the [App SDK](/integrations/app-sdk) to render your surfaces.
 - Access to the Whatmore **dashboard** for managing videos and tagging products.
 
 You obtain a **bearer access token** yourself from `GET /auth/access-token?store_id=<store_id>`
-and send it on every API call. See [Authentication](authentication.md).
+and send it on every API call. See [Authentication](/integrations/authentication).
 
 ## 2. Environments
 
@@ -21,10 +23,10 @@ tokens**, so integration testing never touches live data.
 
 ## 3. Integration checklist
 
-- [ ] `store_id` + Brand ID received; access token obtained ([Auth](authentication.md))
-- [ ] Catalog connected — in the dashboard ([pull + field mapping](catalog-api.md#connect-in-the-dashboard-recommended)) or via the [Catalog API](catalog-api.md#catalog-api-automation)
-- [ ] Widget embedded from the dashboard-generated snippet (or [App SDK](app-sdk.md) for apps)
-- [ ] [Order tracking](order-tracking.md) called on order completion
+- [ ] `store_id` + Brand ID received; access token obtained ([Auth](/integrations/authentication))
+- [ ] Catalog connected — in the dashboard ([pull + field mapping](/integrations/catalog-api#connect-in-the-dashboard-recommended)) or via the [Catalog API](/integrations/catalog-api#catalog-api-automation)
+- [ ] Widget embedded from the dashboard-generated snippet (or [App SDK](/integrations/app-sdk) for apps)
+- [ ] [Order tracking](/integrations/order-tracking) called on order completion
 - [ ] Attribution verified in the dashboard
 
 ## Mental model
@@ -34,4 +36,4 @@ tokens**, so integration testing never touches live data.
 - **Reference products by your own `client_product_id`** (commonly the product URL) — no
   separate id mapping.
 - **Attribution is per order item** — the widget's video-view / add-to-cart signals are
-  matched to line items on the [order-tracking](order-tracking.md) call.
+  matched to line items on the [order-tracking](/integrations/order-tracking) call.

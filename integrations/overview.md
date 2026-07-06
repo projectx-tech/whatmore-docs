@@ -1,4 +1,6 @@
-# Overview
+---
+title: "Overview"
+---
 
 Integrate Whatmore's shoppable-video and live-shopping platform into **any** storefront —
 native mobile apps, custom / headless sites, and the major commerce platforms. This section
@@ -11,13 +13,13 @@ analytics all live there. Your integration is deliberately small, so you go live
 
 | Platform | How you integrate |
 | -------- | ----------------- |
-| **[Shopify](platform-shopify.md)** | Install the native app — no code |
-| **[Magento / Adobe Commerce](platform-magento.md)** | Web widget + Core APIs |
-| **[Salesforce Commerce Cloud](platform-sfcc.md)** | Web widget + Core APIs |
-| **[WooCommerce](platform-woocommerce.md)** | Web widget + Core APIs |
-| **[BigCommerce](platform-bigcommerce.md)** | Web widget + Core APIs |
-| **[Custom / headless](platform-custom.md)** | Web widget + Core APIs (or [App SDK](app-sdk.md) for apps) |
-| **Mobile apps** | [iOS](sdk-ios.md) · [React Native](sdk-react-native.md) · [Android](sdk-android.md) |
+| **[Shopify](/integrations/platform-shopify)** | Install the native app — no code |
+| **[Magento / Adobe Commerce](/integrations/platform-magento)** | Web widget + Core APIs |
+| **[Salesforce Commerce Cloud](/integrations/platform-sfcc)** | Web widget + Core APIs |
+| **[WooCommerce](/integrations/platform-woocommerce)** | Web widget + Core APIs |
+| **[BigCommerce](/integrations/platform-bigcommerce)** | Web widget + Core APIs |
+| **[Custom / headless](/integrations/platform-custom)** | Web widget + Core APIs (or [App SDK](/integrations/app-sdk) for apps) |
+| **Mobile apps** | [iOS](/integrations/sdk-ios) · [React Native](/integrations/sdk-react-native) · [Android](/integrations/sdk-android) |
 
 ## The integration surface
 
@@ -26,9 +28,9 @@ in parallel:
 
 | Building block | What it does |
 | -------------- | ------------ |
-| **[App SDK / web widget](app-sdk.md)** | Renders the shoppable-video surfaces in your app or site |
-| **[Catalog](catalog-api.md)** | Makes your products available to Whatmore (connect your product API in the dashboard, or push via API) |
-| **[Order Tracking](order-tracking.md)** | Reports purchases so Whatmore can attribute them to videos |
+| **[App SDK / web widget](/integrations/app-sdk)** | Renders the shoppable-video surfaces in your app or site |
+| **[Catalog](/integrations/catalog-api)** | Makes your products available to Whatmore (connect your product API in the dashboard, or push via API) |
+| **[Order Tracking](/integrations/order-tracking)** | Reports purchases so Whatmore can attribute them to videos |
 
 Everything else — uploading videos, tagging products to them, building campaigns, viewing
 analytics — happens in the **Whatmore dashboard**, not in your code.
@@ -36,7 +38,7 @@ analytics — happens in the **Whatmore dashboard**, not in your code.
 ## How data flows
 
 You push data to Whatmore; there is no Whatmore-hosted service you must expose an endpoint
-for. All calls are authenticated with a [bearer token](authentication.md).
+for. All calls are authenticated with a [bearer token](/integrations/authentication).
 
 ```
   Your systems                                   Whatmore
@@ -64,7 +66,7 @@ for. All calls are authenticated with a [bearer token](authentication.md).
 
 ## Start here
 
-1. **[Getting Started](getting-started.md)** — access token, `store_id`, checklist
-2. **[App SDK](app-sdk.md)** — mobile ([iOS](sdk-ios.md) · [React Native](sdk-react-native.md) · [Android](sdk-android.md)) or web widget
-3. **Core APIs** — [Authentication](authentication.md) · [Catalog API](catalog-api.md) · [Order Tracking](order-tracking.md)
-4. **Your platform** — [Shopify](platform-shopify.md) · [Magento](platform-magento.md) · [SFCC](platform-sfcc.md) · [WooCommerce](platform-woocommerce.md) · [BigCommerce](platform-bigcommerce.md) · [Custom / Headless](platform-custom.md)
+1. **[Getting Started](/integrations/getting-started)** — access token, `store_id`, checklist
+2. **[App SDK](/integrations/app-sdk)** — mobile ([iOS](/integrations/sdk-ios) · [React Native](/integrations/sdk-react-native) · [Android](/integrations/sdk-android)) or web widget
+3. **Core APIs** — [Authentication](/integrations/authentication) · [Catalog API](/integrations/catalog-api) · [Order Tracking](/integrations/order-tracking)
+4. **Your platform** — [Shopify](/integrations/platform-shopify) · [Magento](/integrations/platform-magento) · [SFCC](/integrations/platform-sfcc) · [WooCommerce](/integrations/platform-woocommerce) · [BigCommerce](/integrations/platform-bigcommerce) · [Custom / Headless](/integrations/platform-custom)

@@ -1,4 +1,6 @@
-# WooCommerce
+---
+title: "WooCommerce"
+---
 
 How a WooCommerce (WordPress) store integrates Whatmore. You connect your catalog via
 WooCommerce's REST API, embed the widget with a dashboard-generated snippet, and report
@@ -26,7 +28,7 @@ curl https://yourstore.com/wp-json/wc/v3/products/PRODUCT_ID \
 
 In [dashboard.whatmore.live](https://dashboard.whatmore.live) select **WooCommerce**, enter
 your endpoint + keys, and map the fields Whatmore fetches from a sample response (see
-[Catalog API → Connect in the dashboard](catalog-api.md#connect-in-the-dashboard-recommended)):
+[Catalog API → Connect in the dashboard](/integrations/catalog-api#connect-in-the-dashboard-recommended)):
 
 | Whatmore field | WooCommerce field |
 | -------------- | ----------------- |
@@ -48,13 +50,13 @@ snippet is generated for your store.
 ## 3. Authentication
 
 For order tracking you need a `store_id` and a bearer token from
-`GET /auth/access-token?store_id=<store_id>`. See [Authentication](authentication.md).
+`GET /auth/access-token?store_id=<store_id>`. See [Authentication](/integrations/authentication).
 
 ## 4. Order tracking
 
 On order completion (`woocommerce_thankyou` or the `woocommerce_order_status_completed`
-hook), call [Order Tracking](order-tracking.md) with the order items. Use the
-[ready-to-use web snippet](order-tracking.md#ready-to-use-snippet-web) — the widget already
+hook), call [Order Tracking](/integrations/order-tracking) with the order items. Use the
+[ready-to-use web snippet](/integrations/order-tracking#ready-to-use-snippet-web) — the widget already
 stores video-view / add-to-cart signals in `localStorage`, so the snippet picks them up
 automatically.
 

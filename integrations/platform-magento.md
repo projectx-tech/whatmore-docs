@@ -1,12 +1,12 @@
 # Magento / Adobe Commerce
 
 How a Magento 2 / Adobe Commerce store fulfils the three
-[integration tracks](README.md#the-three-integration-tracks). The APIs are the same for any
+[integration tracks](README.md). The APIs are the same for any
 non-Shopify store — this page maps them onto Magento specifics.
 
 ## 1. App SDK — embed the surfaces
 
-Add the [Web SDK](app-sdk.md#web-sdk-headless--non-mobile) via a custom `.phtml` template or
+Add the Whatmore web widget via a custom `.phtml` template or
 CMS block where you want each surface (PDP, homepage, category). The SDK emits the
 video-view / add-to-cart signals your order code will forward at checkout.
 

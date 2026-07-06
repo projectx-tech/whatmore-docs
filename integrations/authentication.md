@@ -1,4 +1,4 @@
-# Part 2 — Authentication
+# Authentication
 
 Whatmore's integration APIs are called by **your** backend and authenticated with a
 **bearer token**. You obtain the token from Whatmore using your `store_id`, then send it on

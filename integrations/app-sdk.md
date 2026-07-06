@@ -1,4 +1,4 @@
-# Part 1 — App SDK
+# App SDK
 
 The Whatmore App SDK renders Whatmore's shoppable-video surfaces **natively** inside your
 app. It is **commerce-agnostic**: the SDK renders the experience and emits events through a

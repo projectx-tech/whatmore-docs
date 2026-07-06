@@ -29,7 +29,7 @@ Content-Type: application/json
 | ----- | ----- |
 | `order_id` | Your order identifier. Used for idempotency (see below). |
 | `order_items[]` | One entry per line item: `product_id`, `item_id`, `sku`, `price` (string), `quantity` (int), `currency`. |
-| `whatmore_video_view` | JSON-encoded **string** — a list of `{ product_id, widget_info }` from the [App SDK](app-sdk.md#the-sdk-powers-attribution) for products watched in a video. Defaults to `"[]"`. |
+| `whatmore_video_view` | JSON-encoded **string** — a list of `{ product_id, widget_info }` from the [App SDK](app-sdk.md#the-integration-model) for products watched in a video. Defaults to `"[]"`. |
 | `whatmore_add_to_cart` | JSON-encoded **string** — same shape, for products added to cart from a video. Defaults to `"[]"`. |
 
 ## How attribution works
@@ -51,7 +51,7 @@ Content-Type: application/json
 {% hint style="info" %}
 Send one tracking call per completed order. The `whatmore_video_view` / `whatmore_add_to_cart`
 strings are produced by the App SDK and passed through your checkout — see
-[App SDK → attribution](app-sdk.md#the-sdk-powers-attribution).
+[App SDK → attribution](app-sdk.md#the-integration-model).
 {% endhint %}
 
 ## Cart tracking *(optional)*

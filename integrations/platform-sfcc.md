@@ -1,12 +1,12 @@
 # Salesforce Commerce Cloud (SFCC)
 
 How an SFCC (B2C Commerce) store — SFRA or headless PWA Kit — fulfils the three
-[integration tracks](README.md#the-three-integration-tracks). The APIs are identical to any
+[integration tracks](README.md). The APIs are identical to any
 non-Shopify store; this page maps them onto SFCC specifics.
 
 ## 1. App SDK — embed the surfaces
 
-- **SFRA:** include the [Web SDK](app-sdk.md#web-sdk-headless--non-mobile) via an ISML
+- **SFRA:** include the Whatmore web widget via an ISML
   template (PDP, homepage), optionally packaged as a small **cartridge**.
 - **PWA Kit / headless:** mount the SDK component in your React storefront.
 

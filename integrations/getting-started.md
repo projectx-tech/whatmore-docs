@@ -22,7 +22,7 @@ never touches live data. Base URLs are provided at onboarding.
 
 - [ ] `store_id` + Brand ID received; access token obtained ([Auth](authentication.md))
 - [ ] Products synced via [`POST /product`](catalog-api.md#add-a-product)
-- [ ] Price/stock updates wired via [`PUT /v1/product`](catalog-api.md#update-price--stock)
+- [ ] Price/stock updates wired via [`PUT /v1/product`](catalog-api.md#update-price-and-stock)
 - [ ] [App SDK](app-sdk.md) surfaces embedded; view / add-to-cart signals collected
 - [ ] [`POST /external-shop-order-tracking/private`](order-tracking.md) called on order completion, with SDK signals
 - [ ] Attribution verified in the dashboard

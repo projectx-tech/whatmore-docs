@@ -1,23 +1,19 @@
 # Whatmore Documentation
 
-Central documentation repository for Whatmore. Each section below documents a product,
-integration surface, or repository. This repo is the source of truth — edit the markdown
-here (or in GitBook) and GitBook renders it from `main`.
+Technical documentation for integrating Whatmore's shoppable-video and live-shopping
+platform into your storefront — native mobile apps, custom / headless sites, and the major
+commerce platforms (Shopify, Magento / Adobe Commerce, Salesforce Commerce Cloud,
+WooCommerce, BigCommerce).
 
-## Sections
+Start with the **[Integration Overview](integrations/README.md)**, or jump to your platform
+or SDK from the navigation.
 
-- **[Non-Shopify Integrations](non-shopify-integrations/README.md)** — integrate Magento /
-  Adobe Commerce, Salesforce Commerce Cloud, and custom / headless storefronts with
-  Whatmore (Catalog API, Order Tracking, App SDK, Auth).
+- **App SDK** — [iOS](integrations/sdk-ios.md) · [React Native](integrations/sdk-react-native.md) · [Android](integrations/sdk-android.md)
+- **Core APIs** — [Authentication](integrations/authentication.md) · [Catalog API](integrations/catalog-api.md) · [Order Tracking](integrations/order-tracking.md)
+- **Platform guides** — [Shopify](integrations/platform-shopify.md) · [Magento](integrations/platform-magento.md) · [SFCC](integrations/platform-sfcc.md) · [WooCommerce](integrations/platform-woocommerce.md) · [BigCommerce](integrations/platform-bigcommerce.md)
 
-*(Add new sections here as they are written — one folder per area.)*
+---
 
-## Contributing
-
-1. Clone this repo.
-2. Add or edit markdown under the relevant section folder (create a new folder for a new
-   area).
-3. Add the page(s) to [`SUMMARY.md`](SUMMARY.md) so they appear in the GitBook nav.
-4. Open a PR (or push to `main`). GitBook re-renders automatically.
-
-There is no dependency on any product repository — docs live and version here.
+*This repo is the source of truth — edit the markdown here (or in GitBook) and GitBook
+renders it from `main`. To add a page, drop the markdown in the relevant folder and list it
+in [`SUMMARY.md`](SUMMARY.md).*

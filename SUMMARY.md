@@ -2,18 +2,32 @@
 
 * [Whatmore Documentation](README.md)
 
-## Non-Shopify Integrations
+## Get Started
 
-* [Overview](non-shopify-integrations/README.md)
-* [Getting Started](non-shopify-integrations/getting-started.md)
-* [Part 1 — App SDK](non-shopify-integrations/app-sdk.md)
-  * [iOS (Swift)](non-shopify-integrations/sdk-ios.md)
-  * [React Native](non-shopify-integrations/sdk-react-native.md)
-  * [Android (Kotlin)](non-shopify-integrations/sdk-android.md)
-* [Part 2 — Authentication](non-shopify-integrations/authentication.md)
-* [Part 3 — API Integrations](non-shopify-integrations/api-integrations.md)
-  * [Catalog API](non-shopify-integrations/catalog-api.md)
-  * [Order Tracking](non-shopify-integrations/order-tracking.md)
-* [Magento / Adobe Commerce](non-shopify-integrations/magento.md)
-* [Salesforce Commerce Cloud](non-shopify-integrations/salesforce-commerce-cloud.md)
-* [Backend Questions & Clarifications](non-shopify-integrations/faq.md)
+* [Overview](integrations/README.md)
+* [Getting Started](integrations/getting-started.md)
+
+## App SDK
+
+* [Overview](integrations/app-sdk.md)
+* [iOS (Swift)](integrations/sdk-ios.md)
+* [React Native](integrations/sdk-react-native.md)
+* [Android (Kotlin)](integrations/sdk-android.md)
+
+## Core APIs
+
+* [Authentication](integrations/authentication.md)
+* [Catalog API](integrations/catalog-api.md)
+* [Order Tracking](integrations/order-tracking.md)
+
+## Platform Guides
+
+* [Shopify](integrations/platform-shopify.md)
+* [Magento / Adobe Commerce](integrations/platform-magento.md)
+* [Salesforce Commerce Cloud](integrations/platform-sfcc.md)
+* [WooCommerce](integrations/platform-woocommerce.md)
+* [BigCommerce](integrations/platform-bigcommerce.md)
+
+## Reference
+
+* [Backend Questions & Clarifications](integrations/faq.md)

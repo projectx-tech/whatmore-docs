@@ -71,7 +71,7 @@ making product data available (single, update, or bulk-by-URL above). This is de
 less to build on your side, faster go-live.
 {% endhint %}
 
-## Update price / stock
+## Update price and stock
 
 Keep products fresh by updating them by your own `client_product_id` — no need to know
 Whatmore's internal id:

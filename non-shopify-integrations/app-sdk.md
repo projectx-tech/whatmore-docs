@@ -1,61 +1,55 @@
 # Part 1 — App SDK
 
-The Whatmore App SDK renders Whatmore's shoppable-video surfaces inside your app or site.
-For native mobile apps this is a **`react-native-sdk`** integration; web/headless
-storefronts use the Web SDK. The surface list below is a baseline — scope and theming are
-refined per partner.
-
-## Baseline surfaces
-
-- **Carousel** — a horizontal row of shoppable video cards
-- **PDP Carousel** — carousel scoped to a product-detail page
-- **PDP Floating Card** — a floating video card on the PDP
-- **Celebrity Pages** — creator/celebrity-led video pages
-- *(and similar surfaces as needed)*
-
-## The SDK powers attribution
-
-This is the most important part of the SDK track. As shoppers interact with video, the SDK
-records two kinds of signal, each tied to a **product**:
-
-- **video-view** — the product was shown/watched in a video
-- **add-to-cart** — the product was added to cart from a video
-
-Your app collects these signals and hands them to your order backend, which includes them
-on the [Order Tracking](order-tracking.md) call at checkout. That is how Whatmore knows a
-purchase came from a video.
-
-Each signal is an object of the form:
-
-```json
-{ "product_id": "9268", "widget_info": { "…": "widget attribution payload" } }
-```
-
-- `product_id` — matches the product's [`client_product_id`](catalog-api.md) so line items
-  can be reconciled.
-- `widget_info` — the SDK-generated attribution payload identifying which surface/video
-  drove the interaction.
-
-```
-  App SDK                         Your checkout                 Order tracking → Whatmore
-  ───────                         ─────────────                 ─────────────────────────
-  product watched in video  ──►   collect signals per   ──►     whatmore_video_view:  [ {product_id, widget_info}, … ]
-  product added to cart           tagged product                whatmore_add_to_cart: [ {product_id, widget_info}, … ]
-```
-
-## Web SDK (headless / non-mobile)
-
-```html
-<div id="whatmore-carousel" data-brand-id="YOUR_BRAND_ID"></div>
-<script src="https://cdn.whatmore.ai/sdk.js" async></script>
-```
-
-```js
-WhatmoreSDK.init({ brandId: 'YOUR_BRAND_ID' });
-WhatmoreSDK.render('#whatmore-carousel', { type: 'carousel' });
-```
+The Whatmore App SDK renders Whatmore's shoppable-video surfaces **natively** inside your
+app. It is **commerce-agnostic**: the SDK renders the experience and emits events through a
+single delegate / callbacks object — **your app owns the cart, checkout, navigation, and
+analytics**. This keeps the integration small and is why most of the work stays in the
+[Whatmore dashboard](README.md), not in your codebase.
 
 {% hint style="info" %}
-Exact SDK package names, init signatures, and the surface list are confirmed during
-integration; theming and placement are tailored to your app.
+These pages document the **current** SDK interfaces. The native SDKs are being rebuilt
+(Swift / Kotlin / React Native); treat the signatures as a reference — they may evolve, and
+the docs will be updated to match.
 {% endhint %}
+
+## Surfaces
+
+The SDK ships ready-to-embed templates that share the same store feed, player, products,
+and event model:
+
+| Surface | What it is | Typical placement |
+| ------- | ---------- | ----------------- |
+| **Reel** | Full-screen vertical swipe (Instagram-Reels style) | a "TV" / "Videos" tab |
+| **Feed** | Scrolling post feed | a creator / celebrity page |
+| **Carousel** | Autoplaying horizontal rail that opens the Reel | home, category, any screen |
+
+## Platforms
+
+| Platform | Package | Status |
+| -------- | ------- | ------ |
+| **[iOS (Swift)](sdk-ios.md)** | `WhatmoreReels` (Swift Package) | Available |
+| **[React Native](sdk-react-native.md)** | `@whatmore-repo/whatmore-reactnative-sdk` | Available |
+| **[Android (Kotlin)](sdk-android.md)** | — | Planned |
+
+## The integration model
+
+Every surface takes the **same configuration** (your Whatmore store id + theme) and reports
+user actions through the **same event hooks**. You wire those hooks once and reuse them
+across surfaces.
+
+```
+  Whatmore SDK (renders)            Your app (owns commerce)
+  ──────────────────────            ────────────────────────
+  video surface                     ── add to cart  ─────►  your cart
+  product tile / CTA / like    ──►  ── open product ─────►  your PDP / router
+  (emits events)                    ── on purchase  ─────►  Order Tracking → Whatmore
+```
+
+- **Configure once** — a store id, optional theme, and a product provider.
+- **Handle events** — add-to-cart, product tap, CTA, like/save/share. The SDK never touches
+  a cart, so you decide what each event does.
+- **Attribute purchases** — capture the products surfaced by the SDK and include them on the
+  [Order Tracking](order-tracking.md) call at checkout, so Whatmore can credit the video.
+
+Pick your platform to see the exact interface: **[iOS](sdk-ios.md)** ·
+**[React Native](sdk-react-native.md)** · **[Android](sdk-android.md)**.

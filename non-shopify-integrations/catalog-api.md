@@ -40,6 +40,37 @@ Content-Type: application/json
 - `price` and `compare_price` are strings; `compare_price` is the strike-through / MRP.
 - `product_metadata` is a free-form object for `sku`, `variant_id`, etc.
 
+## Bulk import (large catalogs)
+
+For a large catalog you don't build a payload per product — just hand Whatmore a list of
+product **URLs** and it ingests them:
+
+```http
+POST /product/upload/bulk
+Authorization: Bearer <access_token>
+Content-Type: application/json
+```
+
+```json
+{
+  "store_id": "<store_id>",
+  "url_list": [
+    "https://www.yourstore.com/en/rose-hair-mist-75ml/p/9268",
+    "https://www.yourstore.com/en/velvet-lipstick/p/5521"
+  ]
+}
+```
+
+Whatmore fetches and stores each product from its URL. Use `POST /product-variants/upload/bulk`
+(same body) to bulk-import variants. This is the fastest path to a live catalog.
+
+{% hint style="info" %}
+**Video & media are managed in the Whatmore dashboard — there is no upload API to
+integrate.** You upload, trim, and tag videos in the dashboard; your only catalog job is
+making product data available (single, update, or bulk-by-URL above). This is deliberate:
+less to build on your side, faster go-live.
+{% endhint %}
+
 ## Update price / stock
 
 Keep products fresh by updating them by your own `client_product_id` — no need to know

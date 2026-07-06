@@ -17,21 +17,23 @@ plus `product_metadata` for `sku` / `variant_id`. See the
 
 **How do products sync?** You push them to Whatmore:
 
-- **Initial load / add:** `POST /product` per product ([Catalog API](catalog-api.md#add-a-product)).
+- **Initial load / add:** `POST /product` per product, or bulk-by-URL via
+  [`POST /product/upload/bulk`](catalog-api.md#bulk-import-large-catalogs) for large catalogs.
 - **Incremental updates:** `PUT /v1/product` by `client_product_id` — send it whenever
   price or inventory changes.
 - **Fetch / verify:** `GET /events/product/{client_product_id}`, or list with
   `GET /brand/{store_id}/products`.
 
 Because you reference products by *your own* `client_product_id` (commonly the URL), there
-is no separate id-mapping to maintain. Bulk import for large catalogs is available; the
-exact bulk format is confirmed at onboarding.
+is no separate id-mapping to maintain. **Video and media are managed in the dashboard — no
+upload API to build.**
 
 ## 3. Bulk vs single fetch
 
 Single-product fetch (`GET /events/product/{client_product_id}`) and a per-store list
-(`GET /brand/{store_id}/products`) are available. For large catalogs, bulk import is
-supported — confirmed at onboarding.
+(`GET /brand/{store_id}/products`) are available. For large catalogs, bulk import takes a
+list of product URLs — see
+[Bulk import](catalog-api.md#bulk-import-large-catalogs).
 
 ## 4. Order tracking / "webhooks"
 

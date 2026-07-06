@@ -1,78 +1,63 @@
 # Backend Questions & Clarifications
 
-Answers to the questions backend teams most commonly raise. Where an answer is not yet
-finalised it is marked **Open point** and confirmed jointly during integration.
+Answers to the questions backend teams most commonly raise.
 
-{% hint style="warning" %}
-Contracts referenced here are **illustrative** — see the linked pages for the sample
-shapes.
-{% endhint %}
+## 1. Product data — when is it read?
 
-## 1. Product Details API
+Whatmore stores your product data (you sync it via the [Catalog API](catalog-api.md)) and
+serves it to the video surfaces. You do **not** host a product API for Whatmore to call.
+Products render from Whatmore's stored copy, which you keep current with `PUT /v1/product`.
 
-**When exactly is `GET /api/products/{productId}` called?** On demand — primarily when a
-shopper interacts with a video/surface that has the product tagged — with short-lived
-caching. **Not** on every video open as an uncached call, **not** during video upload, and
-**not** as a nightly full-catalog crawl. See
-[Product Details API → When is this called](product-details-api.md#when-is-this-api-called).
+**What fields does a product have?** `client_product_id`, `product_link`, `title`,
+`description`, `price`, `compare_price`, `currency`, `thumbnail_image`, `product_status`,
+plus `product_metadata` for `sku` / `variant_id`. See the
+[Catalog API response](catalog-api.md#fetch-a-product).
 
-**Expected response payload?** See the [sample response](product-details-api.md#response)
-— `productId`, `url`, `title`, `price {amount, currency}`, `inStock`, `quantityAvailable`,
-`variants`, `images`. As detailed as possible.
+## 2. Catalog synchronization
 
-> **Open point:** exact cache TTL and call timing.
+**How do products sync?** You push them to Whatmore:
 
-## 2. Product Catalog Synchronization
+- **Initial load / add:** `POST /product` per product ([Catalog API](catalog-api.md#add-a-product)).
+- **Incremental updates:** `PUT /v1/product` by `client_product_id` — send it whenever
+  price or inventory changes.
+- **Fetch / verify:** `GET /events/product/{client_product_id}`, or list with
+  `GET /brand/{store_id}/products`.
 
-**How should products be synchronized with Whatmore?** In this model there is **no bulk
-catalog upload**. Products are tagged to videos by URL; `productId` is a substring of that
-URL; Whatmore pulls detail on demand via your Product Details API and stays fresh via the
-[product-updates webhook](webhooks.md#product-details-webhook). This resolves the
-"initial upload / bulk push / incremental / full re-sync" questions — none of those steps
-are required because there is no catalog copy to keep in sync. See
-[README → No bulk catalog upload](README.md#no-bulk-catalog-upload-required).
+Because you reference products by *your own* `client_product_id` (commonly the URL), there
+is no separate id-mapping to maintain. Bulk import for large catalogs is available; the
+exact bulk format is confirmed at onboarding.
 
-## 3. Product API — bulk vs single
+## 3. Bulk vs single fetch
 
-Single-product `GET /api/products/{productId}` is the baseline.
+Single-product fetch (`GET /events/product/{client_product_id}`) and a per-store list
+(`GET /brand/{store_id}/products`) are available. For large catalogs, bulk import is
+supported — confirmed at onboarding.
 
-> **Open point:** whether a bulk / multi-id fetch is added depends on volume — to be
-> agreed. See [Product Details API → Bulk fetch](product-details-api.md#bulk-fetch).
+## 4. Order tracking / "webhooks"
 
-## 4. Webhooks
+Order data is **pushed by you** to `POST /external-shop-order-tracking/private` on order
+completion — see [Order Tracking](order-tracking.md). Key semantics:
 
-Strategy details — **retry policy, timeout, idempotency, failure recovery** — are listed
-as [delivery semantics](webhooks.md#delivery-semantics).
-
-> **Open point:** the concrete numbers (retry counts/backoff, timeout seconds, idempotency
-> key, backfill mechanism) are agreed jointly.
+- **Idempotency:** orders are de-duplicated by `order_id`; a repeat is rejected
+  (`Order Id already exists`), never double-counted — so retries are safe.
+- **Timeout / retry:** send one call per order; on network failure, re-send the same
+  `order_id`. Recommended retry cadence is confirmed at onboarding.
 
 ## 5. API Contracts
 
-Sample request/response for every integration API is on the
-[Product Details API](product-details-api.md) and [Webhooks](webhooks.md) pages.
+Concrete request/response examples for every endpoint are on the
+[Catalog API](catalog-api.md) and [Order Tracking](order-tracking.md) pages. A formal
+OpenAPI/Swagger export can be provided on request.
 
-> **Open point:** a formal OpenAPI/Swagger spec can be produced once shapes are frozen.
+## 6. Security
 
-## 6. Catalog Synchronization Process
-
-Because the model is pull-on-demand (see #2), there is no initial sync / incremental /
-full re-sync lifecycle to operate. Product accuracy is maintained entirely by the
-product-updates webhook plus on-demand fetch.
+- **Authentication:** all calls use a bearer access token obtained from
+  `GET /auth/access-token` with your `store_id` — see [Authentication](authentication.md).
+- **Environment separation:** production and staging issue separate `store_id`s and tokens.
+- **Token handling:** keep the token server-side; the App SDK uses only the public Brand ID.
 
 ## 7. Performance
 
-> **Open points**, agreed jointly:
-> - **API rate limits** on your Product Details API (Whatmore-side call volume)
-> - **Webhook rate limits** Whatmore accepts
-> - **Expected response times** for the Product Details API
-> - Performance recommendations (caching, payload size, keep-alive)
-
-## 8. Security
-
-**API key rotation** — supported via **overlapping keys**: issue a new key, accept both old
-and new during a grace window, then retire the old key — so credentials rotate without
-service interruption. Applies in both directions (see
-[Authentication](authentication.md)).
-
-> **Open point:** rotation cadence and the exact grace-window mechanism are agreed jointly.
+> Confirmed jointly at onboarding: API rate limits, expected response times, and any
+> recommendations (token caching, batching catalog updates). As a baseline, cache the
+> access token and send catalog updates only on change rather than on a schedule.

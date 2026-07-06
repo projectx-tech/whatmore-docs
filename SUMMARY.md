@@ -8,8 +8,8 @@
 * [Part 1 — App SDK](app-sdk.md)
 * [Part 2 — Authentication](authentication.md)
 * [Part 3 — API Integrations](api-integrations.md)
-  * [Product Details API](product-details-api.md)
-  * [Webhooks](webhooks.md)
+  * [Catalog API](catalog-api.md)
+  * [Order Tracking](order-tracking.md)
 
 ## Platform Guides
 

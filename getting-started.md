@@ -2,47 +2,36 @@
 
 Prerequisites and a checklist for integrating a non-Shopify storefront with Whatmore.
 
-{% hint style="warning" %}
-URLs and shapes here are **illustrative** — confirmed jointly during integration.
-{% endhint %}
-
 ## 1. Get access
 
-Your Whatmore contact provisions a **brand** and issues:
+Your Whatmore contact provisions your store and issues:
 
-- A **Brand ID** — your store's identifier on Whatmore (used by the App SDK).
-- A **Whatmore API token** — used by **your** backend to post
-  [webhooks](webhooks.md) to Whatmore.
-- Access to the Whatmore **dashboard** for uploading and tagging videos.
+- A **`store_id`** — identifies your store; used to get an access token and on every API call.
+- A **Brand ID** — used by the [App SDK](app-sdk.md) to render your surfaces.
+- Access to the Whatmore **dashboard** for managing videos and tagging products.
 
-In the other direction, **you** issue Whatmore a **merchant API token** so Whatmore can
-call your [Product Details API](product-details-api.md). See
-[Authentication](authentication.md).
+You obtain a **bearer access token** yourself from `GET /auth/access-token?store_id=<store_id>`
+and send it on every API call. See [Authentication](authentication.md).
 
 ## 2. Environments
 
-Test and production use **separate keys and endpoints**.
-
-| Environment | Whatmore webhooks base | Purpose |
-| ----------- | ---------------------- | ------- |
-| Production  | `https://api.whatmore.ai/webhooks/{brand}/...` | Live traffic |
-| Staging     | *confirmed jointly* | Integration testing |
+Production and staging issue **separate `store_id`s and tokens**, so integration testing
+never touches live data. Base URLs are provided at onboarding.
 
 ## 3. Integration checklist
 
-- [ ] Brand provisioned; both API tokens exchanged ([Auth](authentication.md))
-- [ ] [App SDK](app-sdk.md) surfaces embedded; session IDs flow to checkout
-- [ ] [Product Details API](product-details-api.md) live (`GET /api/products/{productId}`)
-- [ ] `product.updated` [webhook](webhooks.md#product-details-webhook) posting on price/stock change
-- [ ] `order.completed` [webhook](webhooks.md#order-tracking-webhook) posting with **per-item** attribution
-- [ ] *(optional)* cart webhook
-- [ ] Attribution verified in dashboard
+- [ ] `store_id` + Brand ID received; access token obtained ([Auth](authentication.md))
+- [ ] Products synced via [`POST /product`](catalog-api.md#add-a-product)
+- [ ] Price/stock updates wired via [`PUT /v1/product`](catalog-api.md#update-price--stock)
+- [ ] [App SDK](app-sdk.md) surfaces embedded; view / add-to-cart signals collected
+- [ ] [`POST /external-shop-order-tracking/private`](order-tracking.md) called on order completion, with SDK signals
+- [ ] Attribution verified in the dashboard
 
 ## Mental model
 
-- **No bulk catalog upload** — Whatmore pulls product detail on demand by `productId`
-  (a substring of the product URL). See [README](README.md#no-bulk-catalog-upload-required).
-- **Traffic is bidirectional** — you host an API Whatmore calls, and you post webhooks
-  Whatmore receives.
-- **Attribution is per order item** — carry `whatmore_user_id` / `whatmore_session_id`
-  from the SDK through to the order webhook.
+- **You push to Whatmore.** You sync your catalog and report orders; there is no
+  Whatmore-hosted API you must expose an endpoint for.
+- **Reference products by your own `client_product_id`** (commonly the product URL) — no
+  separate id mapping.
+- **Attribution is per order item** — the SDK's video-view / add-to-cart signals are
+  matched to line items on the order-tracking call.

@@ -1,54 +1,44 @@
 # Magento / Adobe Commerce
 
 How a Magento 2 / Adobe Commerce store fulfils the three
-[integration tracks](README.md#the-three-integration-tracks). The contracts are the same as
-any non-Shopify store — this page maps them onto Magento specifics.
-
-{% hint style="warning" %}
-Snippets are **illustrative**. Confirm final shapes jointly.
-{% endhint %}
+[integration tracks](README.md#the-three-integration-tracks). The APIs are the same for any
+non-Shopify store — this page maps them onto Magento specifics.
 
 ## 1. App SDK — embed the surfaces
 
-Add the [Web SDK](app-sdk.md#web-sdk-headless--non-mobile) via a custom `.phtml` template
-or CMS block where you want each surface (PDP, homepage, category):
+Add the [Web SDK](app-sdk.md#web-sdk-headless--non-mobile) via a custom `.phtml` template or
+CMS block where you want each surface (PDP, homepage, category). The SDK emits the
+video-view / add-to-cart signals your order code will forward at checkout.
 
 ```html
 <div id="whatmore-carousel" data-brand-id="YOUR_BRAND_ID"></div>
 <script src="https://cdn.whatmore.ai/sdk.js" async></script>
 ```
 
-Wire the SDK's `addToCart` callback to Magento's cart (`/rest/V1/carts/mine/items` or the
-guest-cart endpoint), and carry the
-[Whatmore session IDs](app-sdk.md#session-identity--attribution) onto the cart line so they
-survive to checkout.
-
 ## 2. Authentication
 
-Issue Magento → Whatmore and Whatmore → Magento keys per
-[Authentication](authentication.md). Store the merchant API token used to protect your
-Product Details API in Magento's config/secure storage.
+Fetch a bearer token from `GET /auth/access-token?store_id=<store_id>` server-side (store
+`store_id`/token in Magento secure config). See [Authentication](authentication.md).
 
-## 3a. Product Details API (you host)
+## 3a. Catalog sync (push products to Whatmore)
 
-Expose [`GET /api/products/{productId}`](product-details-api.md) backed by Magento product
-data. `productId` should map to the identifier embedded in your Magento product URL.
+Map Magento catalog data onto the [Catalog API](catalog-api.md):
 
-- Source fields from the catalog: price (with store-view currency), `is_in_stock` and
-  `qty` from stock, media gallery, configurable/variant data.
-- Implement as a custom REST endpoint (custom module) or a thin service in front of
-  Magento's Catalog APIs.
+- On product save/import → `POST /product` with `product_link`, `client_product_id` (your
+  Magento product id or URL), `price`, `compare_price`, `currency`, `title`,
+  `thumbnail_image`, and `product_metadata` (`sku`, `variant_id`).
+- On price/stock change (Magento events or indexer hooks) → `PUT /v1/product` with the new
+  `price` / `inventory`.
 
-## 3b. Webhooks (you post to Whatmore)
+## 3b. Order tracking
 
-- **Product updates:** observe price/stock changes (e.g. via Magento events / indexer
-  hooks or a scheduled diff) and POST
-  [`product.updated`](webhooks.md#product-details-webhook).
-- **Orders:** on order completion, POST [`order.completed`](webhooks.md#order-tracking-webhook)
-  with **per-item** Whatmore attribution IDs for items that carried them.
+On order placement (e.g. `checkout_submit_all_after` / order success), call
+[`POST /external-shop-order-tracking/private`](order-tracking.md) with the order items and
+the `whatmore_video_view` / `whatmore_add_to_cart` signals carried from the SDK through
+checkout.
 
 ## Verify
 
-- SDK surfaces render and add-to-cart writes to the correct Magento cart
-- Product Details API returns live price/stock
-- Order webhook fires on the confirmation step with per-item attribution
+- Surfaces render and the SDK signals reach your order code
+- Products appear in Whatmore (`GET /events/product/{client_product_id}`)
+- Order tracking fires on the success page and attribution shows in the dashboard

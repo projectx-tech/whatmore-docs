@@ -1,14 +1,9 @@
 # Part 1 — App SDK
 
-The Whatmore App SDK brings Whatmore's shoppable-video surfaces into your app or site. For
-native mobile apps this is a **`react-native-sdk`** integration; web/headless storefronts
-use the Web SDK. The surface list below is a **baseline** — scope and behaviour are refined
-per partner.
-
-{% hint style="warning" %}
-Snippets are **illustrative only**. Final SDK package names, init signatures, and event
-names are confirmed during integration.
-{% endhint %}
+The Whatmore App SDK renders Whatmore's shoppable-video surfaces inside your app or site.
+For native mobile apps this is a **`react-native-sdk`** integration; web/headless
+storefronts use the Web SDK. The surface list below is a baseline — scope and theming are
+refined per partner.
 
 ## Baseline surfaces
 
@@ -18,32 +13,39 @@ names are confirmed during integration.
 - **Celebrity Pages** — creator/celebrity-led video pages
 - *(and similar surfaces as needed)*
 
-## Session identity & attribution
+## The SDK powers attribution
 
-This is the most important part of the SDK track, because it powers order attribution.
+This is the most important part of the SDK track. As shoppers interact with video, the SDK
+records two kinds of signal, each tied to a **product**:
 
-- The SDK issues and carries two identifiers:
-  - `whatmore_user_id` — the Whatmore user identity
-  - `whatmore_session_id` — the Whatmore viewing session
-- These IDs **originate from the App SDK** and must be **carried through your checkout** so
-  they can be included on the [Order Tracking Webhook](webhooks.md#order-tracking-webhook).
-- Attribution is tracked **per order item, not per order** — a single order may contain
-  items discovered through different videos/sessions (or none).
-- Only items where a video was actually watched should carry these IDs.
+- **video-view** — the product was shown/watched in a video
+- **add-to-cart** — the product was added to cart from a video
+
+Your app collects these signals and hands them to your order backend, which includes them
+on the [Order Tracking](order-tracking.md) call at checkout. That is how Whatmore knows a
+purchase came from a video.
+
+Each signal is an object of the form:
+
+```json
+{ "product_id": "9268", "widget_info": { "…": "widget attribution payload" } }
+```
+
+- `product_id` — matches the product's [`client_product_id`](catalog-api.md) so line items
+  can be reconciled.
+- `widget_info` — the SDK-generated attribution payload identifying which surface/video
+  drove the interaction.
 
 ```
-  App SDK                         Your checkout                 Order webhook → Whatmore
-  ───────                         ─────────────                 ────────────────────────
-  video watched                   cart line item                order item:
-  → whatmore_user_id      ─────►  remembers the IDs   ─────►      productId
-  → whatmore_session_id           for tagged items                whatmore_user_id
-                                                                  whatmore_session_id
+  App SDK                         Your checkout                 Order tracking → Whatmore
+  ───────                         ─────────────                 ─────────────────────────
+  product watched in video  ──►   collect signals per   ──►     whatmore_video_view:  [ {product_id, widget_info}, … ]
+  product added to cart           tagged product                whatmore_add_to_cart: [ {product_id, widget_info}, … ]
 ```
 
 ## Web SDK (headless / non-mobile)
 
 ```html
-<!-- Illustrative -->
 <div id="whatmore-carousel" data-brand-id="YOUR_BRAND_ID"></div>
 <script src="https://cdn.whatmore.ai/sdk.js" async></script>
 ```
@@ -51,16 +53,9 @@ This is the most important part of the SDK track, because it powers order attrib
 ```js
 WhatmoreSDK.init({ brandId: 'YOUR_BRAND_ID' });
 WhatmoreSDK.render('#whatmore-carousel', { type: 'carousel' });
-WhatmoreSDK.on('addToCart', ({ productId, qty }) => { /* your cart */ });
 ```
 
-## Open for discussion
-
-The App SDK track is intentionally kept open and evolves with your requirements. Points to
-align on:
-
-- **Theming / design tokens** to match your app's look and feel
-- **Placement and navigation behaviour** for each surface
-- **Session identity handling** (`whatmore_user_id`, `whatmore_session_id`) and how it
-  flows through to order attribution
-- **Analytics events and depth of tracking**
+{% hint style="info" %}
+Exact SDK package names, init signatures, and the surface list are confirmed during
+integration; theming and placement are tailored to your app.
+{% endhint %}

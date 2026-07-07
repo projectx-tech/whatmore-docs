@@ -25,7 +25,7 @@ tokens**, so integration testing never touches live data.
 ## 3. Integration checklist
 
 - [ ] `store_id` + Brand ID received; access token obtained ([Auth](/integrations/authentication))
-- [ ] Catalog [pull connected](/integrations/catalog-api#pull-initial-load-and-refresh) (product API + field mapping) **and** [push updates](/integrations/catalog-api#push-event-based-updates) wired (price / stock / images)
+- [ ] Catalog [pull connected](/integrations/catalog-api#pull-initial-load-and-refresh) (product API + field mapping, product URLs added); [real-time push](/integrations/catalog-api#push-real-time-updates) wired *(optional — price / availability)*
 - [ ] Widget embedded from the dashboard-generated snippet (or [App SDK](/integrations/app-sdk) for apps)
 - [ ] [Order tracking](/integrations/order-tracking) called on order completion
 - [ ] Attribution verified in the dashboard

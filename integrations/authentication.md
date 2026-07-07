@@ -13,8 +13,9 @@ every API call.
 GET /auth/access-token?store_id=<store_id>
 ```
 
-Returns a bearer token (JWT) scoped to your store. Request it from your server, cache it,
-and reuse it across calls.
+Returns a bearer token (JWT) scoped to your store. The token is **long-lived — it does not
+expire** — so request it once from your server, cache it, and reuse it across all calls;
+there's no refresh flow to build.
 
 ## Call the APIs with the token
 
@@ -27,7 +28,8 @@ Authorization: Bearer <access_token>
 Content-Type: application/json
 ```
 
-A missing or invalid token is rejected with **HTTP 401**.
+A missing or invalid token is rejected with **HTTP 401**. See
+[Errors & Conventions](/integrations/errors) for all status codes and response shapes.
 
 ## Base URL
 

@@ -36,7 +36,7 @@ Whatmore fetches a sample response and you **map fields** to Whatmore's in the d
 | Currency | set manually |
 
 Whatmore then pulls product data itself. *(Prefer to push? Use the
-[Catalog API](/integrations/catalog-api#push-event-based-updates) instead.)*
+[Catalog API](/integrations/catalog-api#push-real-time-updates) instead.)*
 
 ## 3. Embed the widget
 
@@ -83,6 +83,6 @@ for that product, so items can be matched to the video signals. See
 
 ## Verify
 
-- Products resolve (`GET /events/product/{client_product_id}`)
+- Products appear in your Whatmore dashboard catalog
 - Widget renders from the pasted snippet
 - Order tracking fires on confirmation and attribution shows in the dashboard

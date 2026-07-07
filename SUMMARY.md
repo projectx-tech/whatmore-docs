@@ -5,6 +5,7 @@
   * [App SDK](integrations/app-sdk.md)
   * [Authentication](integrations/authentication.md)
   * [Catalog API](integrations/catalog-api.md)
+  * [Errors & Conventions](integrations/errors.md)
   * [Backend Questions & Clarifications](integrations/faq.md)
   * [Getting Started](integrations/getting-started.md)
   * [Order Tracking](integrations/order-tracking.md)

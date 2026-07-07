@@ -32,7 +32,7 @@ Content-Type: application/json
 | Field | Notes |
 | ----- | ----- |
 | `order_id` | Your order identifier. Used for idempotency (see below). |
-| `order_items[]` | One entry per line item: `product_id`, `item_id`, `sku`, `price` (string), `quantity` (int), `currency`. |
+| `order_items[]` | One entry per line item: `product_id`, `price` (string), `quantity` (int), `currency` — plus optional `item_id` / `sku`. |
 | `whatmore_video_view` | JSON-encoded **string** — a list of `{ product_id, widget_info }` for products watched in a video. On web, the widget stores this in `localStorage._whatmore_viewed_products`. Defaults to `"[]"`. |
 | `whatmore_add_to_cart` | JSON-encoded **string** — same shape, for products added to cart from a video. On web, stored in `localStorage._whatmore_add_to_cart_products`. Defaults to `"[]"`. |
 
@@ -41,6 +41,9 @@ The `product_id` you send in `order_items[]` **must be the same identifier your 
 for that product** (your `client_product_id`) — otherwise the item can't be matched to the
 video signal.
 </Warning>
+
+A successful call returns **HTTP 200** with an empty body (`{}`). An item that matches no
+video signal is simply left unattributed — it is **not** an error.
 
 ## Ready-to-use snippet (web)
 
@@ -82,9 +85,10 @@ Build `orderItems` from your order (`product_id`, `item_id`, `sku`, `price`, `qu
 ## Idempotency & retries
 
 - Orders are de-duplicated by `order_id`. If an order is submitted twice, the duplicate is
-  rejected with **HTTP 404 (`Order Id already exists`)** rather than double-counted.
+  rejected with **HTTP 404 (`Order Id already exists.`)** rather than double-counted.
 - This makes retries safe: re-sending the same `order_id` after a network failure cannot
   create a duplicate. Use a stable `order_id` and treat the duplicate response as success.
+- Full status-code list is on [Errors & Conventions](/integrations/errors).
 
 <Info>
 Send one tracking call per completed order. The `whatmore_video_view` / `whatmore_add_to_cart`

@@ -35,7 +35,8 @@
         "pages": [
           "integrations/authentication",
           "integrations/catalog-api",
-          "integrations/order-tracking"
+          "integrations/order-tracking",
+          "integrations/errors"
         ]
       },
       {

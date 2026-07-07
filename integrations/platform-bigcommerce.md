@@ -20,7 +20,7 @@ In [dashboard.whatmore.live](https://dashboard.whatmore.live/) select **BigComme
 the endpoint + token, and map fields to Whatmore's (title, `client_product_id`, price,
 compare-at, product URL, image) — see
 [Catalog API → Connect in the dashboard](/integrations/catalog-api#pull-initial-load-and-refresh).
-*(Also push price/stock/image updates via the [Catalog API](/integrations/catalog-api#push-event-based-updates).)*
+*(Also push price/stock/image updates via the [Catalog API](/integrations/catalog-api#push-real-time-updates).)*
 
 ## 2. Embed the widget
 
@@ -47,6 +47,6 @@ add-to-cart signals in `localStorage`, so the
 
 ## Verify
 
-- Products resolve in Whatmore (`GET /events/product/{client_product_id}`)
+- Products appear in your Whatmore dashboard catalog
 - Widget renders from the pasted snippet
 - Order tracking fires on confirmation and attribution shows in the dashboard

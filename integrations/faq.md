@@ -7,42 +7,37 @@ Answers to the questions backend teams most commonly raise.
 
 ## 1. How does Whatmore get my product data?
 
-Two complementary mechanisms, used together (see [Catalog API](/integrations/catalog-api)):
+Two mechanisms (see [Catalog API](/integrations/catalog-api)):
 
-- **[Pull](/integrations/catalog-api#pull-initial-load-and-refresh):** you give Whatmore your
-  product API endpoint + credentials and map fields in the dashboard; Whatmore **pulls** your
-  catalog for the initial load and refreshes.
-- **[Push](/integrations/catalog-api#push-event-based-updates):** when a product changes,
-  you **push** the update (`PUT /v1/product`), add a product (`POST /product`), or bulk-add
-  (`POST /product/upload/bulk`).
+- **[Pull](/integrations/catalog-api#pull-initial-load-and-refresh) (primary):** you give
+  Whatmore your product API endpoint + credentials and add product URLs in the dashboard;
+  Whatmore **pulls** each product from your API — for the initial load, every new product, and
+  on refresh. There is no product-creation API for you to call.
+- **[Push](/integrations/catalog-api#push-real-time-updates) (optional):** when price or
+  availability changes, you **push** `PUT /v1/product` so the change reflects immediately.
 
 Whatmore stores the data and serves it to the surfaces.
 
-**What fields does a product have?** `client_product_id`, `product_link`, `title`,
-`description`, `price`, `compare_price`, `currency`, `thumbnail_image`, `product_status`,
-plus `product_metadata` for `sku` / `variant_id`. See the
-[Catalog API response](/integrations/catalog-api#fetch-a-product).
+**What fields does a product have?** Your product API returns them and you map them in the
+dashboard — see [Expected product JSON](/integrations/catalog-api#expected-product-json).
 
 ## 2. Catalog synchronization
 
-- **Initial load & refresh (pull):** point Whatmore at your product API in the dashboard;
-  Whatmore reads the full catalog on connect and on refresh.
-- **Event-based updates (push):** when price, stock, quantity, or images change, send
-  `PUT /v1/product` by `client_product_id`; add new SKUs with `POST /product` or bulk-by-URL
-  [`POST /product/upload/bulk`](/integrations/catalog-api#bulk-import-large-catalogs).
-- **Fetch / verify:** `GET /events/product/{client_product_id}`, or list with
-  `GET /brand/{store_id}/products`.
+- **Initial load & refresh (pull):** point Whatmore at your product API in the dashboard and
+  add product URLs; Whatmore reads each product on connect and on refresh.
+- **Real-time updates (push, optional):** when price or availability changes, send
+  `PUT /v1/product` by `client_product_id` so it reflects immediately.
 
-Because you reference products by *your own* `client_product_id` (commonly the URL), there
-is no separate id-mapping to maintain. **Video and media are managed in the dashboard — no
-upload API to build.**
+Because you reference products by *your own* `client_product_id` (the `id` from your product
+API), there is no separate id-mapping to maintain. **Video and media are managed in the
+dashboard — no upload API to build.**
 
-## 3. Bulk vs single fetch
+## 3. How do I add or remove a product?
 
-Single-product fetch (`GET /events/product/{client_product_id}`) and a per-store list
-(`GET /brand/{store_id}/products`) are available. For large catalogs, bulk import takes a
-list of product URLs — see
-[Bulk import](/integrations/catalog-api#bulk-import-large-catalogs).
+**Add:** put its product page **URL** in the dashboard — Whatmore pulls it from your product
+API and stores it (new products are also picked up on refresh). There's no product-create or
+bulk API for you to call. **Remove / take down:** drop it from your catalog (reflected on
+refresh) or push `PUT /v1/product` with `product_status: "inactive"`.
 
 ## 4. Order tracking / "webhooks"
 
@@ -50,7 +45,7 @@ Order data is **pushed by you** to `POST /external-shop-order-tracking/private` 
 completion — see [Order Tracking](/integrations/order-tracking). Key semantics:
 
 - **Idempotency:** orders are de-duplicated by `order_id`; a repeat is rejected
-  (`Order Id already exists`), never double-counted — so retries are safe.
+  (`Order Id already exists.`), never double-counted — so retries are safe.
 - **Timeout / retry:** send one call per order; on network failure, re-send the same
   `order_id`. Recommended retry cadence is confirmed at onboarding.
 
@@ -69,6 +64,7 @@ OpenAPI/Swagger export can be provided on request.
 
 ## 7. Performance
 
-> Confirmed jointly at onboarding: API rate limits, expected response times, and any
-> recommendations (token caching, batching catalog updates). As a baseline, cache the
-> access token and send catalog updates only on change rather than on a schedule.
+The default rate limit is **1,000 requests per minute per store**, and can be increased per
+client on request. Cache the long-lived access token rather than re-fetching it, and push
+catalog updates **on change** rather than on a schedule. See
+[Errors & Conventions](/integrations/errors) for status codes, response shapes, and limits.

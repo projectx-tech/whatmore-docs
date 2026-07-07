@@ -63,6 +63,6 @@ automatically.
 
 ## Verify
 
-- Products resolve in Whatmore (`GET /events/product/{client_product_id}`)
+- Products appear in your Whatmore dashboard catalog
 - Widget renders from the pasted snippet
 - Order tracking fires on the thank-you page and attribution shows in the dashboard

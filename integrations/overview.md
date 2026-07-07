@@ -43,22 +43,25 @@ order backend reports purchases **back** for attribution. All API calls are auth
 with a [bearer token](/integrations/authentication).
 
 ```mermaid
-flowchart LR
-  subgraph store["Your storefront"]
-    api["Product API / catalog"]
-    app["App or site (App SDK / widget)"]
-    ord["Order backend"]
-  end
-  subgraph wm["Whatmore"]
-    cat[("Product catalog")]
-    surf["Shoppable video surfaces"]
-    attr[("Attribution")]
-  end
-  api -->|"Whatmore pulls, or you push"| cat
-  cat --> surf
-  surf -->|"rendered in your app"| app
-  app -->|"view / add-to-cart signals"| ord
-  ord -->|"order tracking (Bearer token)"| attr
+sequenceDiagram
+    autonumber
+    participant S as Your storefront
+    participant W as Whatmore
+    participant U as Shopper
+
+    Note over S,W: Catalog
+    S->>W: Connect product API (Whatmore pulls) or push via Catalog API
+    W-->>S: Products stored and kept fresh
+
+    Note over S,W: Render
+    W->>S: App SDK / widget renders Reel, Feed, Carousel
+    U->>S: Watches videos, taps products, adds to cart
+    Note over S: view / add-to-cart signals captured client-side
+
+    Note over S,W: Attribution
+    U->>S: Completes purchase
+    S->>W: POST order tracking — items + signals (Bearer token)
+    W-->>S: Purchase attributed to the driving video
 ```
 
 ## Key concepts

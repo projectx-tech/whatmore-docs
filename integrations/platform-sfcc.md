@@ -18,8 +18,8 @@ curl "https://yourinstance.commercecloud.salesforce.com/.../products/PRODUCT_ID"
 In [dashboard.whatmore.live](https://dashboard.whatmore.live/) select **Salesforce Commerce
 Cloud**, enter the endpoint + token, and map fields to Whatmore's (title,
 `client_product_id`, price, compare-at, product URL, image) — see
-[Catalog API → Connect in the dashboard](/integrations/catalog-api#connect-in-the-dashboard-recommended).
-*(Prefer to push? Use the [Catalog API](/integrations/catalog-api#catalog-api-automation).)*
+[Catalog API → Connect in the dashboard](/integrations/catalog-api#pull-initial-load-and-refresh).
+*(Also push price/stock/image updates via the [Catalog API](/integrations/catalog-api#push-event-based-updates).)*
 
 ## 2. Embed the widget
 

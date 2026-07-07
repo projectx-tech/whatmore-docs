@@ -22,7 +22,7 @@ curl https://yourstore.com/products/PRODUCT_IDENTIFIER \
 ```
 
 Whatmore fetches a sample response and you **map fields** to Whatmore's in the dashboard
-(see [Catalog API → Connect in the dashboard](/integrations/catalog-api#connect-in-the-dashboard-recommended)):
+(see [Catalog API → Connect in the dashboard](/integrations/catalog-api#pull-initial-load-and-refresh)):
 
 | Whatmore field | Your API field (example) |
 | -------------- | ------------------------ |
@@ -35,7 +35,7 @@ Whatmore fetches a sample response and you **map fields** to Whatmore's in the d
 | Currency | set manually |
 
 Whatmore then pulls product data itself. *(Prefer to push? Use the
-[Catalog API](/integrations/catalog-api#catalog-api-automation) instead.)*
+[Catalog API](/integrations/catalog-api#push-event-based-updates) instead.)*
 
 ## 3. Embed the widget
 

@@ -37,26 +37,28 @@ analytics — happens in the **[Whatmore dashboard](https://dashboard.whatmore.l
 
 ## How data flows
 
-Catalog data flows **into** Whatmore (Whatmore pulls from your product API, or you push it
-via the Catalog API); Whatmore renders the shoppable surfaces **inside** your app; and your
-order backend reports purchases **back** for attribution. All API calls are authenticated
-with a [bearer token](/integrations/authentication).
+Catalog data flows **into** Whatmore — Whatmore pulls your catalog for the initial load and
+refreshes, **and** you push event-based updates (price, stock, images) as they change.
+Whatmore then renders the shoppable surfaces **inside** your app, and your order backend
+reports purchases **back** for attribution. All API calls are authenticated with a
+[bearer token](/integrations/authentication).
 
 ```mermaid
 sequenceDiagram
     autonumber
+    participant U as Shopper
     participant S as Your storefront
     participant W as Whatmore
-    participant U as Shopper
 
-    Note over S,W: Catalog
-    S->>W: Connect product API (Whatmore pulls) or push via Catalog API
-    W-->>S: Products stored and kept fresh
+    Note over S,W: Catalog (pull + push)
+    W->>S: Pull product API — initial sync and refresh
+    S-->>W: Product data (title, price, image, stock)
+    S->>W: Push events — price, stock, quantity, image changes
 
-    Note over S,W: Render
+    Note over U,W: Render
     W->>S: App SDK / widget renders Reel, Feed, Carousel
     U->>S: Watches videos, taps products, adds to cart
-    Note over S: view / add-to-cart signals captured client-side
+    Note over S: view / add-to-cart signals captured
 
     Note over S,W: Attribution
     U->>S: Completes purchase

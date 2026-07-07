@@ -6,14 +6,16 @@ Answers to the questions backend teams most commonly raise.
 
 ## 1. How does Whatmore get my product data?
 
-Two ways (see [Catalog API](/integrations/catalog-api)):
+Two complementary mechanisms, used together (see [Catalog API](/integrations/catalog-api)):
 
-- **Dashboard connect (recommended):** you give Whatmore your product API endpoint +
-  credentials and map fields in the dashboard; Whatmore **pulls** product data for you.
-- **Catalog API (automation):** you **push** products with `POST /product` /
-  `POST /product/upload/bulk` and keep them fresh with `PUT /v1/product`.
+- **[Pull](/integrations/catalog-api#pull-initial-load-and-refresh):** you give Whatmore your
+  product API endpoint + credentials and map fields in the dashboard; Whatmore **pulls** your
+  catalog for the initial load and refreshes.
+- **[Push](/integrations/catalog-api#push-event-based-updates):** when a product changes,
+  you **push** the update (`PUT /v1/product`), add a product (`POST /product`), or bulk-add
+  (`POST /product/upload/bulk`).
 
-Either way Whatmore stores the data and serves it to the surfaces.
+Whatmore stores the data and serves it to the surfaces.
 
 **What fields does a product have?** `client_product_id`, `product_link`, `title`,
 `description`, `price`, `compare_price`, `currency`, `thumbnail_image`, `product_status`,
@@ -22,11 +24,11 @@ plus `product_metadata` for `sku` / `variant_id`. See the
 
 ## 2. Catalog synchronization
 
-- **Connect / initial load:** point Whatmore at your product API in the dashboard, or push
-  with `POST /product` / bulk-by-URL
+- **Initial load & refresh (pull):** point Whatmore at your product API in the dashboard;
+  Whatmore reads the full catalog on connect and on refresh.
+- **Event-based updates (push):** when price, stock, quantity, or images change, send
+  `PUT /v1/product` by `client_product_id`; add new SKUs with `POST /product` or bulk-by-URL
   [`POST /product/upload/bulk`](/integrations/catalog-api#bulk-import-large-catalogs).
-- **Incremental updates:** on the dashboard connect Whatmore re-reads your API; on the push
-  path, send `PUT /v1/product` by `client_product_id` when price or inventory changes.
 - **Fetch / verify:** `GET /events/product/{client_product_id}`, or list with
   `GET /brand/{store_id}/products`.
 

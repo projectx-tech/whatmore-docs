@@ -50,7 +50,8 @@ sequenceDiagram
     S->>A: onTapProduct / onTapCTA(url, event)
     U->>S: Like / save / share
     S->>A: onToggleLike / onToggleSave / onTapShare
-    Note over A: Your app owns cart, checkout, and navigation;<br/>report the sale via Order Tracking at checkout
+    Note over A: Your app owns cart, checkout, and navigation
+    Note over A: Then report the sale via Order Tracking at checkout
 ```
 
 - **Configure once** — a store id, optional theme, and a product provider.

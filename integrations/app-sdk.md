@@ -37,19 +37,19 @@ Every surface takes the **same configuration** (your Whatmore store id + theme) 
 user actions through the **same event hooks**. You wire those hooks once and reuse them
 across surfaces.
 
-```mermaid
+```mermaid actions={false}
 sequenceDiagram
     autonumber
     participant U as Shopper
-    participant S as Whatmore SDK
     participant A as Your app
-    S-->>U: Renders Reel / Feed / Carousel
-    U->>S: Add to cart
-    S->>A: onTapAddToCart(product, event)
-    U->>S: Tap product or CTA
-    S->>A: onTapProduct / onTapCTA(url, event)
-    U->>S: Like / save / share
-    S->>A: onToggleLike / onToggleSave / onTapShare
+    participant W as Whatmore SDK
+    W-->>A: Renders Reel / Feed / Carousel in your app
+    U->>W: Add to cart
+    W->>A: onTapAddToCart(product, event)
+    U->>W: Tap product or CTA
+    W->>A: onTapProduct / onTapCTA(url, event)
+    U->>W: Like / save / share
+    W->>A: onToggleLike / onToggleSave / onTapShare
     Note over A: Your app owns cart, checkout, and navigation
     Note over A: Then report the sale via Order Tracking at checkout
 ```

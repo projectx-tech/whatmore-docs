@@ -43,7 +43,7 @@ Whatmore then renders the shoppable surfaces **inside** your app, and your order
 reports purchases **back** for attribution. All API calls are authenticated with a
 [bearer token](/integrations/authentication).
 
-```mermaid
+```mermaid actions={false}
 sequenceDiagram
     autonumber
     participant U as Shopper

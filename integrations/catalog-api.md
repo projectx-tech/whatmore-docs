@@ -1,5 +1,6 @@
 ---
 title: "Catalog API"
+mode: "wide"
 ---
 
 Whatmore keeps its own copy of your product data (title, price, stock, image) so videos can

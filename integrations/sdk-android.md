@@ -1,5 +1,6 @@
 ---
 title: "Android SDK (Kotlin)"
+mode: "wide"
 ---
 
 `whatmore-storefront` — drop-in shoppable video for Android. One dependency, three ready-to-embed

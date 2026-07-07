@@ -1,5 +1,6 @@
 ---
 title: "React Native SDK"
+mode: "wide"
 ---
 
 `@whatmore-repo/whatmore-storefront` — drop-in shoppable video for React Native. Renders

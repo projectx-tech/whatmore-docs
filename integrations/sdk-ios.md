@@ -1,5 +1,6 @@
 ---
 title: "iOS SDK (Swift)"
+mode: "wide"
 ---
 
 `WhatmoreStorefront` — drop-in shoppable video for iOS. One Swift Package, three ready-to-embed

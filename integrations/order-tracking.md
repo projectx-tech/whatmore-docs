@@ -1,5 +1,6 @@
 ---
 title: "Order Tracking"
+mode: "wide"
 ---
 
 When an order completes, your backend reports it to Whatmore so purchases can be attributed

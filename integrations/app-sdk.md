@@ -38,19 +38,19 @@ user actions through the **same event hooks**. You wire those hooks once and reu
 across surfaces.
 
 ```mermaid
-flowchart LR
-  subgraph sdk["Whatmore SDK — renders"]
-    surf["Video surface<br/>Reel / Feed / Carousel"]
-  end
-  subgraph app["Your app — owns commerce"]
-    cart["Your cart"]
-    pdp["Your PDP / router"]
-    ot["Order Tracking"]
-  end
-  surf -->|"add to cart"| cart
-  surf -->|"tap product / CTA"| pdp
-  surf -->|"purchase completes"| ot
-  ot --> attr[("Whatmore attribution")]
+sequenceDiagram
+    autonumber
+    participant U as Shopper
+    participant S as Whatmore SDK
+    participant A as Your app
+    S-->>U: Renders Reel / Feed / Carousel
+    U->>S: Add to cart
+    S->>A: onTapAddToCart(product, event)
+    U->>S: Tap product or CTA
+    S->>A: onTapProduct / onTapCTA(url, event)
+    U->>S: Like / save / share
+    S->>A: onToggleLike / onToggleSave / onTapShare
+    Note over A: Your app owns cart, checkout, and navigation;<br/>report the sale via Order Tracking at checkout
 ```
 
 - **Configure once** — a store id, optional theme, and a product provider.

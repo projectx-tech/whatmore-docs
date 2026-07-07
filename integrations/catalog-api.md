@@ -29,9 +29,22 @@ optional. Less to build on your side, faster go-live.
 **You add products by their URL — there's no product-creation API to call.** In
 [dashboard.whatmore.live](https://dashboard.whatmore.live/) you connect your **product API**
 (an endpoint that returns a single product's detail, plus any auth it needs) and add your
-product page URLs. For each URL, Whatmore extracts the product identifier, calls your product
-API for that product, and stores the returned JSON. This is how the **initial load**, every
-**new product**, and each **refresh** work.
+product page URLs. For each URL, Whatmore extracts the product id, calls your product API for
+that product, and stores the returned JSON. This is how the **initial load**, every **new
+product**, and each **refresh** work.
+
+### How the product id is read from a URL
+
+Whatmore turns each product URL into a **product id** — the value it uses to query your API,
+and which it stores as your [`client_product_id`](#product-identity).
+
+- **Give us a regex to extract it exactly (recommended).** For a Nike-style URL
+  `https://www.nike.com/t/air-max-90-shoes/CN8490-002`, a rule such as `([^/]+)$` (the last
+  path segment) yields `CN8490-002`. A regex keeps extraction deterministic across all your
+  URL shapes.
+- **Default behaviour today:** with no rule set, Whatmore takes the trailing token of the URL
+  — it splits on `-` and uses the last segment. That works when the URL ends in the id, but is
+  brittle for other URL patterns, so providing a regex is strongly recommended.
 
 ### Expected product JSON
 
@@ -41,37 +54,44 @@ to pick them). A representative response:
 
 ```json
 {
-  "id": 9268,
-  "name": "Mid Night Rose Hair Mist 75ml",
-  "permalink": "https://www.yourstore.com/product/rose-hair-mist-75ml",
-  "price": "12.500",
-  "regular_price": "15.000",
-  "sale_price": "12.500",
-  "currency": "KWD",
-  "description": "A warm rose & oud hair mist, 75ml.",
-  "sku": "RHM-75",
+  "id": "CN8490-002",
+  "name": "Nike Air Max 90",
+  "permalink": "https://www.nike.com/t/air-max-90-shoes/CN8490-002",
+  "price": "130.00",
+  "regular_price": "150.00",
+  "sale_price": "130.00",
+  "currency": "USD",
+  "description": "The Air Max 90 stays true to its running roots with the iconic Waffle sole.",
+  "sku": "CN8490-002",
   "stock_status": "instock",
-  "stock_quantity": 24,
+  "stock_quantity": 42,
   "images": [
-    { "src": "https://cdn.yourstore.com/9268.jpg" },
-    { "src": "https://cdn.yourstore.com/9268-alt.jpg" }
+    { "src": "https://static.nike.com/air-max-90/CN8490-002.jpg" },
+    { "src": "https://static.nike.com/air-max-90/CN8490-002-alt.jpg" }
   ]
 }
 ```
 
-You map those fields to Whatmore's:
+Every field, its type, and where it maps in Whatmore:
 
-| Whatmore field | Source field (example above) | Required |
-| -------------- | ---------------------------- | -------- |
-| `client_product_id` | `id` | **Yes** — stable & unique; the key you reuse in [order tracking](/integrations/order-tracking) |
-| Product title | `name` / `title` | **Yes** |
-| `price` | `price` / `sale_price` | **Yes** |
-| `product_link` (URL) | `permalink` | **Yes** |
-| `thumbnail_image` | `images[0].src` | **Yes** |
-| `compare_price` (MRP) | `regular_price` | Recommended |
-| Currency | `currency`, or set manually in the dashboard | Recommended |
-| Description | `description` | Optional |
-| Availability | `stock_status` / `stock_quantity` | Optional |
+| Field | Type | Maps to → | Required | Notes |
+| ----- | ---- | --------- | -------- | ----- |
+| `id` | string or integer | `client_product_id` | **Yes** | Stable, unique product id. Normally equals the id in the URL; it's the key you reuse in [order tracking](/integrations/order-tracking). |
+| `name` | string | Product title | **Yes** | Display title. |
+| `permalink` | string (URL) | `product_link` | **Yes** | Canonical product page URL. |
+| `price` | string | `price` | **Yes** | Current selling price as a decimal **string** (`"130.00"`), not a number. |
+| `sale_price` | string | `price` | Optional | Use in place of `price` when the product is on sale. |
+| `regular_price` | string | `compare_price` (MRP) | Recommended | Struck-through / original price. |
+| `currency` | string (ISO 4217) | Currency | Recommended | e.g. `"USD"`. If your API omits it, set it once in the dashboard. |
+| `images` | array of `{ "src": string }` | `thumbnail_image` | **Yes** | First entry (`images[0].src`) becomes the thumbnail. |
+| `description` | string | Description | Optional | May contain HTML. |
+| `sku` | string | `product_metadata.sku` | Optional | Stock-keeping unit. |
+| `stock_status` | string (enum) | Availability | Optional | One of `"instock"`, `"outofstock"`, `"onbackorder"`. |
+| `stock_quantity` | integer or `null` | Availability | Optional | Units in stock; `null` when inventory isn't tracked. |
+
+Field names above are illustrative — your API can use any names, and you map them in the
+dashboard (nested keys included). Only the **id**, **title**, **price**, **product URL**, and
+**first image** are strictly required; the rest are recommended or optional.
 
 See your platform guide for the exact endpoint and credentials:
 [WooCommerce](/integrations/platform-woocommerce) · [Custom / headless](/integrations/platform-custom) ·
@@ -80,42 +100,64 @@ See your platform guide for the exact endpoint and credentials:
 
 ## Product identity
 
-- **`client_product_id`** — *your* product identifier (the `id` from your product API), and
-  the key you reuse on every push and in [order tracking](/integrations/order-tracking).
-  Whatever value you map here **must be the exact same value you send in
-  `order_items[].product_id`** — otherwise the item can't be attributed.
+- **`client_product_id`** — *your* product id, **extracted from the product URL** (see
+  [above](#how-the-product-id-is-read-from-a-url)) and normally identical to the `id` your API
+  returns. It is the key you reuse on every push and in
+  [order tracking](/integrations/order-tracking): whatever value ends up here **must be the
+  exact same value you send in `order_items[].product_id`**, or the item can't be attributed.
 - **`product_link`** — the product's URL.
 - Whatmore also assigns its own internal numeric `product_id` for its records.
 
 ## Push: real-time updates
 
-New products flow in through the pull above. Push is **optional** — use it only when you want
-a price or availability change to reflect **immediately**, without waiting for the next
-refresh. It uses a [bearer token](/integrations/authentication); the base URL is
+New products flow in through the pull above. Push is **optional** — use it only when you want a
+price or availability change to reflect **immediately**, without waiting for the next refresh.
+It uses a [bearer token](/integrations/authentication); the base URL is
 `https://api.whatmore.live`. Status codes and response conventions are on
 [Errors & Conventions](/integrations/errors).
 
-Send it whenever price, availability, or images change, keyed by your own `client_product_id`:
+`POST /v2/product` **upserts** a product by `client_product_id` — creating it if it's new and
+updating it otherwise. The body is the product in Whatmore's field names, mirroring the
+[product JSON](#expected-product-json) above:
 
 ```http
-PUT /v1/product
+POST /v2/product
 Authorization: Bearer <access_token>
 Content-Type: application/json
 ```
 
 ```json
 {
-  "client_product_id": "9268",
-  "price": "11.000",
-  "currency": "KWD",
-  "thumbnail_image": "https://cdn.yourstore.com/9268-v2.jpg",
+  "client_product_id": "CN8490-002",
+  "product_link": "https://www.nike.com/t/air-max-90-shoes/CN8490-002",
+  "title": "Nike Air Max 90",
+  "price": "130.00",
+  "compare_price": "150.00",
+  "currency": "USD",
+  "description": "The Air Max 90 stays true to its running roots.",
+  "thumbnail_image": "https://static.nike.com/air-max-90/CN8490-002.jpg",
+  "sku": "CN8490-002",
+  "stock_status": "instock",
+  "stock_quantity": 42,
   "product_status": "active"
 }
 ```
 
-- **Availability is controlled by `product_status`** — `"active"` (shoppable) or `"inactive"`
-  (taken down). Send `"inactive"` to remove a product from your surfaces. Whether an inactive
-  product is hidden or shown as out-of-stock is configured per store during onboarding.
-- **Update-only.** `PUT /v1/product` updates an **existing** product matched by
-  `client_product_id`; an unknown id is a no-op. New products are added via the pull (add the
-  URL in the dashboard) — there's no create-via-API step.
+| Field | Type | Required | Notes |
+| ----- | ---- | -------- | ----- |
+| `client_product_id` | string | **Yes** | Identifies the product to upsert; must match your catalog + [order tracking](/integrations/order-tracking). |
+| `product_link` | string (URL) | **Yes** on create | Canonical product URL. |
+| `title` | string | **Yes** on create | Display title. |
+| `price` | string | **Yes** on create | Selling price as a decimal string. |
+| `compare_price` | string | Recommended | MRP / struck-through price. |
+| `currency` | string (ISO 4217) | Recommended | e.g. `"USD"`. |
+| `thumbnail_image` | string (URL) | **Yes** on create | Product image. |
+| `description` | string | Optional | May contain HTML. |
+| `sku` | string | Optional | Stored under `product_metadata`. |
+| `stock_status` | string (enum) | Optional | `"instock"`, `"outofstock"`, or `"onbackorder"` — inventory availability. |
+| `stock_quantity` | integer or `null` | Optional | Units in stock. |
+| `product_status` | string (enum) | Optional | `"active"` (shoppable) or `"inactive"` (taken down on your surfaces). Whether an out-of-stock product is hidden or shown as OOS is configured per store at onboarding. |
+
+On **update**, only the fields you send are changed — omit the rest. New products still flow
+in automatically through the pull; use `POST /v2/product` only when you need an immediate
+update.

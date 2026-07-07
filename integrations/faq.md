@@ -14,7 +14,7 @@ Two mechanisms (see [Catalog API](/integrations/catalog-api)):
   Whatmore **pulls** each product from your API — for the initial load, every new product, and
   on refresh. There is no product-creation API for you to call.
 - **[Push](/integrations/catalog-api#push-real-time-updates) (optional):** when price or
-  availability changes, you **push** `PUT /v1/product` so the change reflects immediately.
+  availability changes, you **push** `POST /v2/product` so the change reflects immediately.
 
 Whatmore stores the data and serves it to the surfaces.
 
@@ -26,18 +26,18 @@ dashboard — see [Expected product JSON](/integrations/catalog-api#expected-pro
 - **Initial load & refresh (pull):** point Whatmore at your product API in the dashboard and
   add product URLs; Whatmore reads each product on connect and on refresh.
 - **Real-time updates (push, optional):** when price or availability changes, send
-  `PUT /v1/product` by `client_product_id` so it reflects immediately.
+  `POST /v2/product` by `client_product_id` so it reflects immediately.
 
-Because you reference products by *your own* `client_product_id` (the `id` from your product
-API), there is no separate id-mapping to maintain. **Video and media are managed in the
-dashboard — no upload API to build.**
+Because you reference products by *your own* `client_product_id` (extracted from the product
+URL — normally the same as the `id` your API returns), there is no separate id-mapping to
+maintain. **Video and media are managed in the dashboard — no upload API to build.**
 
 ## 3. How do I add or remove a product?
 
 **Add:** put its product page **URL** in the dashboard — Whatmore pulls it from your product
 API and stores it (new products are also picked up on refresh). There's no product-create or
 bulk API for you to call. **Remove / take down:** drop it from your catalog (reflected on
-refresh) or push `PUT /v1/product` with `product_status: "inactive"`.
+refresh) or push `POST /v2/product` with `product_status: "inactive"`.
 
 ## 4. Order tracking / "webhooks"
 

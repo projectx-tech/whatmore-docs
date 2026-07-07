@@ -21,11 +21,11 @@ Content-Type: application/json
 {
   "order_id": "ORD-10293",
   "order_items": [
-    { "product_id": "9268", "item_id": "LI-1", "sku": "RHM-75", "price": "12.500", "quantity": 1, "currency": "KWD" },
-    { "product_id": "5521", "item_id": "LI-2", "sku": "LIP-02", "price": "8.000",  "quantity": 2, "currency": "KWD" }
+    { "product_id": "CN8490-002", "item_id": "LI-1", "sku": "CN8490-002", "price": "130.00", "quantity": 1, "currency": "USD" },
+    { "product_id": "DA1234-100", "item_id": "LI-2", "sku": "DA1234-100", "price": "90.00",  "quantity": 2, "currency": "USD" }
   ],
-  "whatmore_video_view":  "[{\"product_id\": \"9268\", \"widget_info\": { … }}]",
-  "whatmore_add_to_cart": "[{\"product_id\": \"9268\", \"widget_info\": { … }}]"
+  "whatmore_video_view":  "[{\"product_id\": \"CN8490-002\", \"widget_info\": { … }}]",
+  "whatmore_add_to_cart": "[{\"product_id\": \"CN8490-002\", \"widget_info\": { … }}]"
 }
 ```
 

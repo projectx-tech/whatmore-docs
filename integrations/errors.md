@@ -31,7 +31,7 @@ Conventions that apply to every Core API call — [Authentication](/integrations
 | `200` | Success. Writes return `{}`; reads return the documented JSON. |
 | `401` | Missing or invalid bearer token. Re-fetch the token and retry. |
 | `404` | `Order Id already exists.` — the order was already recorded (see [idempotency](#idempotency--retries)). `Brand is invalid` — the `store_id` isn't recognised. |
-| `422` | Request body failed validation — e.g. a missing `client_product_id` on `PUT /v1/product`, or a malformed [order-tracking](/integrations/order-tracking) payload. |
+| `422` | Request body failed validation — e.g. a missing `client_product_id` on `POST /v2/product`, or a malformed [order-tracking](/integrations/order-tracking) payload. |
 
 Errors are returned in FastAPI's shape: `{ "detail": "<message>" }`.
 

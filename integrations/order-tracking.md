@@ -24,17 +24,45 @@ Content-Type: application/json
     { "product_id": "CN8490-002", "item_id": "LI-1", "sku": "CN8490-002", "price": "130.00", "quantity": 1, "currency": "USD" },
     { "product_id": "DA1234-100", "item_id": "LI-2", "sku": "DA1234-100", "price": "90.00",  "quantity": 2, "currency": "USD" }
   ],
-  "whatmore_video_view":  "[{\"product_id\": \"CN8490-002\", \"widget_info\": { … }}]",
-  "whatmore_add_to_cart": "[{\"product_id\": \"CN8490-002\", \"widget_info\": { … }}]"
+  "whatmore_video_view":  "[{\"product_id\":\"CN8490-002\",\"widget_info\":\"carousel_84213\"}]",
+  "whatmore_add_to_cart": "[{\"product_id\":\"CN8490-002\",\"widget_info\":\"carousel_84213\"}]"
 }
 ```
 
-| Field | Notes |
-| ----- | ----- |
-| `order_id` | Your order identifier. Used for idempotency (see below). |
-| `order_items[]` | One entry per line item: `product_id`, `price` (string), `quantity` (int), `currency` — plus optional `item_id` / `sku`. |
-| `whatmore_video_view` | JSON-encoded **string** — a list of `{ product_id, widget_info }` for products watched in a video. On web, the widget stores this in `localStorage._whatmore_viewed_products`. Defaults to `"[]"`. |
-| `whatmore_add_to_cart` | JSON-encoded **string** — same shape, for products added to cart from a video. On web, stored in `localStorage._whatmore_add_to_cart_products`. Defaults to `"[]"`. |
+| Field | Type | Notes |
+| ----- | ---- | ----- |
+| `order_id` | string | Your order identifier. Used for idempotency (see below). |
+| `order_items[]` | array | One entry per line item — see the table below. |
+| `whatmore_video_view` | **string** (JSON-encoded) | Products **watched in a video**. A JSON-encoded array of `{ product_id, widget_info }`. On web the widget stores it in `localStorage._whatmore_viewed_products`; pass it through as-is. Defaults to `"[]"`. |
+| `whatmore_add_to_cart` | **string** (JSON-encoded) | Same shape, for products **added to cart from a video**. On web, `localStorage._whatmore_add_to_cart_products`. Defaults to `"[]"`. |
+
+Each `order_items[]` entry:
+
+| Field | Type | Required | Notes |
+| ----- | ---- | -------- | ----- |
+| `product_id` | string | **Yes** | Your `client_product_id` — must match your catalog (see warning below). |
+| `price` | string | **Yes** | Unit price as a decimal string (`"130.00"`). |
+| `quantity` | integer | **Yes** | Units ordered. |
+| `currency` | string (ISO 4217) | **Yes** | e.g. `"USD"`. |
+| `item_id` | string | Optional | Your line-item id. |
+| `sku` | string | Optional | Stock-keeping unit. |
+
+### What's inside the video-view / add-to-cart signals
+
+`whatmore_video_view` and `whatmore_add_to_cart` are **JSON-encoded strings** (not objects) —
+the App SDK / widget produces them and you pass them straight through from `localStorage`. You
+don't build these by hand. Decoded, the string is an array of small objects:
+
+```json
+[
+  { "product_id": "CN8490-002", "widget_info": "carousel_84213" }
+]
+```
+
+| Field | Type | Notes |
+| ----- | ---- | ----- |
+| `product_id` | string | The `client_product_id` that was viewed / added from a video. |
+| `widget_info` | string | Identifies the surface + video credited, formatted `<widget_type>_<event_id>` — e.g. `carousel_84213`. `widget_type` is one of `carousel`, `stories`, `collection`, `banner`, `embed`; `event_id` is the Whatmore video id. |
 
 <Warning>
 The `product_id` you send in `order_items[]` **must be the same identifier your catalog uses

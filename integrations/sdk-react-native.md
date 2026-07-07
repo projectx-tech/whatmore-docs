@@ -2,7 +2,7 @@
 title: "React Native SDK"
 ---
 
-`@whatmore-repo/whatmore-reactnative-sdk` — drop-in shoppable video for React Native. Renders
+`@whatmore-repo/whatmore-storefront` — drop-in shoppable video for React Native. Renders
 **native** views (not a WebView) and ships three ready-to-embed surfaces (Reel, Feed,
 Carousel) that share the same configuration and event handlers. It mirrors the
 [iOS SDK](/integrations/sdk-ios) surface-for-surface.
@@ -10,48 +10,48 @@ Carousel) that share the same configuration and event handlers. It mirrors the
 ## Install
 
 ```bash
-npm install @whatmore-repo/whatmore-reactnative-sdk
+npm install @whatmore-repo/whatmore-storefront
 ```
 
 Native peer dependencies to link in your app: `react-native-video`, `react-native-svg`.
 
 ## Configure once
 
-Wrap your app in `WhatmoreProvider` with a configuration and your event handlers; place the
+Wrap your app in `WhatmoreStorefrontProvider` with a configuration and your event handlers; place the
 surfaces anywhere below it.
 
 ```tsx
 import {
-  WhatmoreProvider, WhatmoreReel, WhatmoreFeed, WhatmoreCarousel,
-  type WhatmoreReelsConfiguration, type WhatmoreReelsHandlers,
-} from '@whatmore-repo/whatmore-reactnative-sdk';
+  WhatmoreStorefrontProvider, WhatmoreReel, WhatmoreFeed, WhatmoreCarousel,
+  type WhatmoreStorefrontConfiguration, type WhatmoreStorefrontHandlers,
+} from '@whatmore-repo/whatmore-storefront';
 
-const config: WhatmoreReelsConfiguration = {
+const config: WhatmoreStorefrontConfiguration = {
   storeId: 'STRNZFBL8TQ',                         // required — your Whatmore store id
   statuses: ['live', 'upcoming'],
   theme: { accent: '#FFFFFF', likeActive: '#FF3B30' },
   productProvider: async (event) => [ /* WhatmoreProduct[] */ ],
 };
 
-const handlers: WhatmoreReelsHandlers = {
+const handlers: WhatmoreStorefrontHandlers = {
   onTapAddToCart: (product, event) => Cart.add(product.id),
   onTapProduct:   (product, event) => Router.openPDP(product.id),
 };
 
-<WhatmoreProvider configuration={config} handlers={handlers}>
+<WhatmoreStorefrontProvider configuration={config} handlers={handlers}>
   {/* app */}
-</WhatmoreProvider>
+</WhatmoreStorefrontProvider>
 ```
 
 ```ts
-interface WhatmoreReelsConfiguration {
+interface WhatmoreStorefrontConfiguration {
   storeId: string;                                         // required
   statuses?: string[];                                     // default ['live', 'upcoming']
-  theme?: WhatmoreReelsTheme;
+  theme?: WhatmoreStorefrontTheme;
   productProvider?: (event: WhatmoreEvent) => Promise<WhatmoreProduct[]>;
 }
 
-interface WhatmoreReelsTheme {
+interface WhatmoreStorefrontTheme {
   accent?: string;       // hex, default '#FFFFFF'
   likeActive?: string;   // hex, default '#FF3B30'
 }
@@ -81,13 +81,13 @@ Fully-visible cards autoplay muted; tapping opens the Reel at that video (the su
 its own full-screen presentation). Any surface can also take its own `handlers` prop to
 override the provider's for that instance.
 
-## Handle events — `WhatmoreReelsHandlers`
+## Handle events — `WhatmoreStorefrontHandlers`
 
 Wire these once on the provider. **Every handler is optional** — the SDK never touches a
 cart, so you decide what each event does.
 
 ```ts
-interface WhatmoreReelsHandlers {
+interface WhatmoreStorefrontHandlers {
   onTapAddToCart?:      (product: WhatmoreProduct, event: WhatmoreEvent) => void;
   onTapProduct?:        (product: WhatmoreProduct, event: WhatmoreEvent) => void;
   onTapViewAllProducts?: (event: WhatmoreEvent) => void;

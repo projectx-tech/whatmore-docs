@@ -2,7 +2,7 @@
 title: "iOS SDK (Swift)"
 ---
 
-`WhatmoreReels` — drop-in shoppable video for iOS. One Swift Package, three ready-to-embed
+`WhatmoreStorefront` — drop-in shoppable video for iOS. One Swift Package, three ready-to-embed
 templates (Reel, Feed, Carousel) that share the same configuration and delegate. SwiftUI +
 AVFoundation, no third-party dependencies; works in both UIKit and SwiftUI hosts.
 
@@ -22,7 +22,7 @@ dependencies: [
 ],
 targets: [
     .target(name: "YourApp", dependencies: [
-        .product(name: "WhatmoreReels", package: "WhatmoreReels")
+        .product(name: "WhatmoreStorefront", package: "WhatmoreStorefront")
     ])
 ]
 ```
@@ -32,18 +32,18 @@ targets: [
 Build the config and your delegate once, reuse them across all surfaces:
 
 ```swift
-import WhatmoreReels
+import WhatmoreStorefront
 
-let config = WhatmoreReelsConfiguration(storeID: "STRNZFBL8TQ")
-let whatmore = AppWhatmoreHandler()   // your WhatmoreReelsDelegate
+let config = WhatmoreStorefrontConfiguration(storeID: "STRNZFBL8TQ")
+let whatmore = AppWhatmoreHandler()   // your WhatmoreStorefrontDelegate
 ```
 
 ```swift
-public struct WhatmoreReelsConfiguration {
+public struct WhatmoreStorefrontConfiguration {
     public init(
         storeID: String,                                   // required — your Whatmore store id
         statuses: [String] = ["live", "upcoming"],         // events to fetch
-        theme: WhatmoreReelsTheme = .default,
+        theme: WhatmoreStorefrontTheme = .default,
         productProvider: ProductProviding = MockProductProvider()
     )
 }
@@ -55,10 +55,10 @@ public struct WhatmoreReelsConfiguration {
 
 ```swift
 // UIKit
-let tv = WhatmoreReelsViewController(configuration: config, startIndex: 0, delegate: whatmore)
+let tv = WhatmoreReelViewController(configuration: config, startIndex: 0, delegate: whatmore)
 
 // SwiftUI
-WhatmoreReelsView(configuration: config, startIndex: 0, delegate: whatmore)
+WhatmoreReelView(configuration: config, startIndex: 0, delegate: whatmore)
     .ignoresSafeArea()
 ```
 
@@ -75,19 +75,19 @@ WhatmoreFeedViewController(configuration: config, celebrityName: celebrity.name,
 ### Carousel — autoplaying rail (SwiftUI only)
 
 ```swift
-WhatmoreVideoCarouselView(configuration: config, title: "Trending Videos", delegate: whatmore)
+WhatmoreCarouselView(configuration: config, title: "Trending Videos", delegate: whatmore)
 ```
 
 Fully-visible cards autoplay muted; tapping opens the Reel at that video (the view manages
 its own full-screen presentation).
 
-## Handle events — `WhatmoreReelsDelegate`
+## Handle events — `WhatmoreStorefrontDelegate`
 
 Implement once and pass to every surface. **Every method is optional** (default no-ops) —
 the SDK never touches a cart, so you decide what each event does.
 
 ```swift
-public protocol WhatmoreReelsDelegate: AnyObject {
+public protocol WhatmoreStorefrontDelegate: AnyObject {
     func reelsDidTapAddToCart(_ product: WhatmoreProduct, in event: WhatmoreEvent)
     func reelsDidTapProduct(_ product: WhatmoreProduct, in event: WhatmoreEvent)
     func reelsDidTapViewAllProducts(in event: WhatmoreEvent)
@@ -109,7 +109,7 @@ public protocol WhatmoreReelsDelegate: AnyObject {
 | `reelsDidTapShare(_:)` | Reel, Feed | share tapped (SDK also presents a share sheet) |
 
 ```swift
-final class AppWhatmoreHandler: WhatmoreReelsDelegate {
+final class AppWhatmoreHandler: WhatmoreStorefrontDelegate {
     func reelsDidTapAddToCart(_ product: WhatmoreProduct, in event: WhatmoreEvent) {
         Cart.shared.add(productID: product.id)
     }
@@ -152,9 +152,9 @@ public struct WhatmoreEvent: Identifiable, Hashable {
 ## Theme
 
 ```swift
-public struct WhatmoreReelsTheme {
+public struct WhatmoreStorefrontTheme {
     public init(accent: Color = .white, likeActive: Color = .red)
-    public static let `default` = WhatmoreReelsTheme()
+    public static let `default` = WhatmoreStorefrontTheme()
 }
 ```
 

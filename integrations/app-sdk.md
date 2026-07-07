@@ -15,7 +15,7 @@ and event model:
 
 | Surface | What it is | Typical placement |
 | ------- | ---------- | ----------------- |
-| **Reel** | Full-screen vertical swipe (Instagram-Reels style) | a "TV" / "Videos" tab |
+| **Reel** | Full-screen vertical, swipe-to-browse video | a "TV" / "Videos" tab |
 | **Feed** | Scrolling post feed | a creator / celebrity page |
 | **Carousel** | Autoplaying horizontal rail that opens the Reel | home, category, any screen |
 
@@ -27,9 +27,9 @@ learned on one platform transfers directly to the others.
 
 | Platform | Package | Status |
 | -------- | ------- | ------ |
-| **[iOS (Swift)](/integrations/sdk-ios)** | `WhatmoreReels` (Swift Package) | Available |
-| **[Android (Kotlin)](/integrations/sdk-android)** | `ai.whatmore:whatmore-reels` (Gradle) | Available |
-| **[React Native](/integrations/sdk-react-native)** | `@whatmore-repo/whatmore-reactnative-sdk` | Available |
+| **[iOS (Swift)](/integrations/sdk-ios)** | `WhatmoreStorefront` (Swift Package) | Available |
+| **[Android (Kotlin)](/integrations/sdk-android)** | `ai.whatmore:whatmore-storefront` (Gradle) | Available |
+| **[React Native](/integrations/sdk-react-native)** | `@whatmore-repo/whatmore-storefront` | Available |
 
 ## The integration model
 

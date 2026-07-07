@@ -2,7 +2,7 @@
 title: "Android SDK (Kotlin)"
 ---
 
-`whatmore-reels` — drop-in shoppable video for Android. One dependency, three ready-to-embed
+`whatmore-storefront` — drop-in shoppable video for Android. One dependency, three ready-to-embed
 templates (Reel, Feed, Carousel) that share the same configuration and listener. Available
 for both **Views/Fragments** and **Jetpack Compose** hosts. It mirrors the
 [iOS SDK](/integrations/sdk-ios) surface-for-surface.
@@ -20,7 +20,7 @@ for both **Views/Fragments** and **Jetpack Compose** hosts. It mirrors the
 ```kotlin
 // build.gradle.kts
 dependencies {
-    implementation("ai.whatmore:whatmore-reels:1.0.0")
+    implementation("ai.whatmore:whatmore-storefront:1.0.0")
 }
 ```
 
@@ -29,17 +29,17 @@ dependencies {
 Build the config and your listener once, then reuse them across every surface:
 
 ```kotlin
-import ai.whatmore.reels.*
+import ai.whatmore.storefront.*
 
-val config = WhatmoreReelsConfiguration(storeId = "STRNZFBL8TQ")
-val whatmore = AppWhatmoreListener()   // your WhatmoreReelsListener
+val config = WhatmoreStorefrontConfiguration(storeId = "STRNZFBL8TQ")
+val whatmore = AppWhatmoreListener()   // your WhatmoreStorefrontListener
 ```
 
 ```kotlin
-data class WhatmoreReelsConfiguration(
+data class WhatmoreStorefrontConfiguration(
     val storeId: String,                                   // required — your Whatmore store id
     val statuses: List<String> = listOf("live", "upcoming"),
-    val theme: WhatmoreReelsTheme = WhatmoreReelsTheme.Default,
+    val theme: WhatmoreStorefrontTheme = WhatmoreStorefrontTheme.Default,
     val productProvider: ProductProvider = MockProductProvider()
 )
 ```
@@ -50,20 +50,20 @@ data class WhatmoreReelsConfiguration(
 
 ```kotlin
 // View
-val reel = WhatmoreReelsView(context).apply {
+val reel = WhatmoreReelView(context).apply {
     configure(config, startIndex = 0)
     listener = whatmore
 }
 
 // Fragment
-val fragment = WhatmoreReelsFragment.newInstance(config, startIndex = 0).apply {
+val fragment = WhatmoreReelFragment.newInstance(config, startIndex = 0).apply {
     listener = whatmore
 }
 ```
 
 ```kotlin
 // Jetpack Compose
-WhatmoreReels(configuration = config, startIndex = 0, listener = whatmore)
+WhatmoreReel(configuration = config, startIndex = 0, listener = whatmore)
 ```
 
 ### Feed — creator / celebrity page
@@ -94,13 +94,13 @@ WhatmoreCarousel(configuration = config, title = "Trending Videos", listener = w
 Fully-visible cards autoplay muted; tapping opens the Reel at that video (the surface manages
 its own full-screen presentation).
 
-## Handle events — `WhatmoreReelsListener`
+## Handle events — `WhatmoreStorefrontListener`
 
 Implement once and attach to every surface. **Every method has a default no-op** — the SDK
 never touches a cart, so you decide what each event does.
 
 ```kotlin
-interface WhatmoreReelsListener {
+interface WhatmoreStorefrontListener {
     fun onTapAddToCart(product: WhatmoreProduct, event: WhatmoreEvent) {}
     fun onTapProduct(product: WhatmoreProduct, event: WhatmoreEvent) {}
     fun onTapViewAllProducts(event: WhatmoreEvent) {}
@@ -122,7 +122,7 @@ interface WhatmoreReelsListener {
 | `onTapShare` | Reel, Feed | share tapped (SDK also presents a share sheet) |
 
 ```kotlin
-class AppWhatmoreListener : WhatmoreReelsListener {
+class AppWhatmoreListener : WhatmoreStorefrontListener {
     override fun onTapAddToCart(product: WhatmoreProduct, event: WhatmoreEvent) {
         Cart.add(productId = product.id)
     }
@@ -165,11 +165,11 @@ data class WhatmoreEvent(
 ## Theme
 
 ```kotlin
-data class WhatmoreReelsTheme(
+data class WhatmoreStorefrontTheme(
     val accent: Color = Color.White,       // primary action tint
     val likeActive: Color = Color.Red      // liked-heart tint
 ) {
-    companion object { val Default = WhatmoreReelsTheme() }
+    companion object { val Default = WhatmoreStorefrontTheme() }
 }
 ```
 

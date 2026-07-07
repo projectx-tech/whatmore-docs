@@ -1,5 +1,6 @@
 ---
 title: "BigCommerce"
+timestamp: false
 ---
 
 How a BigCommerce store integrates Whatmore — Stencil (hosted) or headless. The building

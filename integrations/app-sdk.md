@@ -1,5 +1,6 @@
 ---
 title: "App SDK"
+timestamp: false
 ---
 
 The Whatmore App SDK renders Whatmore's shoppable-video surfaces **natively** inside your

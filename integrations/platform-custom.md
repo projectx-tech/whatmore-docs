@@ -1,5 +1,6 @@
 ---
 title: "Custom / Headless"
+timestamp: false
 ---
 
 For a custom or headless storefront (any stack), you connect Whatmore in three steps:

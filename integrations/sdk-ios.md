@@ -1,5 +1,6 @@
 ---
 title: "iOS SDK (Swift)"
+timestamp: false
 mode: "wide"
 ---
 

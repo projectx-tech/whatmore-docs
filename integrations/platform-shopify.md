@@ -1,5 +1,6 @@
 ---
 title: "Shopify"
+timestamp: false
 ---
 
 Shopify merchants use the **native Whatmore app** — there is no manual API or SDK

@@ -1,5 +1,6 @@
 ---
 title: "Overview"
+timestamp: false
 ---
 
 Integrate Whatmore's shoppable-video platform into **any** storefront —

@@ -1,5 +1,6 @@
 ---
 title: "Magento / Adobe Commerce"
+timestamp: false
 ---
 
 How a Magento 2 / Adobe Commerce store integrates Whatmore — connect your catalog, embed the

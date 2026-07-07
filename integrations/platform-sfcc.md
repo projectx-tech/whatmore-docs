@@ -1,5 +1,6 @@
 ---
 title: "Salesforce Commerce Cloud (SFCC)"
+timestamp: false
 ---
 
 How an SFCC (B2C Commerce) store — SFRA or headless PWA Kit — integrates Whatmore. The

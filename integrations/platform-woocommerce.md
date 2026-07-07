@@ -1,5 +1,6 @@
 ---
 title: "WooCommerce"
+timestamp: false
 ---
 
 How a WooCommerce (WordPress) store integrates Whatmore. You connect your catalog via

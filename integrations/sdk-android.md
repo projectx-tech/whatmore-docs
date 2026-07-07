@@ -1,5 +1,6 @@
 ---
 title: "Android SDK (Kotlin)"
+timestamp: false
 mode: "wide"
 ---
 

@@ -1,5 +1,6 @@
 ---
 title: "Getting Started"
+timestamp: false
 ---
 
 Prerequisites and a checklist for integrating a non-Shopify storefront with Whatmore.

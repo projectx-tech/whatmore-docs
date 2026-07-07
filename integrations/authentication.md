@@ -1,5 +1,6 @@
 ---
 title: "Authentication"
+timestamp: false
 ---
 
 Whatmore's integration APIs are called by **your** backend and authenticated with a

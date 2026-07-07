@@ -1,5 +1,6 @@
 ---
 title: "React Native SDK"
+timestamp: false
 mode: "wide"
 ---
 

@@ -2,7 +2,7 @@
 title: "Overview"
 ---
 
-Integrate Whatmore's shoppable-video and live-shopping platform into **any** storefront —
+Integrate Whatmore's shoppable-video platform into **any** storefront —
 native mobile apps, custom / headless sites, and the major commerce platforms. This section
 is the technical reference for that integration.
 
@@ -33,24 +33,32 @@ in parallel:
 | **[Order Tracking](/integrations/order-tracking)** | Reports purchases so Whatmore can attribute them to videos |
 
 Everything else — uploading videos, tagging products to them, building campaigns, viewing
-analytics — happens in the **Whatmore dashboard**, not in your code.
+analytics — happens in the **[Whatmore dashboard](https://dashboard.whatmore.live/)**, not in your code.
 
 ## How data flows
 
-You push data to Whatmore; there is no Whatmore-hosted service you must expose an endpoint
-for. All calls are authenticated with a [bearer token](/integrations/authentication).
+Catalog data flows **into** Whatmore (Whatmore pulls from your product API, or you push it
+via the Catalog API); Whatmore renders the shoppable surfaces **inside** your app; and your
+order backend reports purchases **back** for attribution. All API calls are authenticated
+with a [bearer token](/integrations/authentication).
 
-```
-  Your systems                                   Whatmore
-  ────────────                                   ────────
-  catalog        ── connect API / push ────────► Product catalog
-  (products)        (dashboard or Catalog API)   (price, stock, media)
-
-  SDK / widget   ── renders surfaces ──────────► shoppable video
-  (app or site)  ◄─ emits view / atc signals ──
-
-  order backend  ── POST order-tracking ───────► Attribution
-  (on purchase)     (with SDK signals)           (video → sale)
+```mermaid
+flowchart LR
+  subgraph store["Your storefront"]
+    api["Product API / catalog"]
+    app["App or site (App SDK / widget)"]
+    ord["Order backend"]
+  end
+  subgraph wm["Whatmore"]
+    cat[("Product catalog")]
+    surf["Shoppable video surfaces"]
+    attr[("Attribution")]
+  end
+  api -->|"Whatmore pulls, or you push"| cat
+  cat --> surf
+  surf -->|"rendered in your app"| app
+  app -->|"view / add-to-cart signals"| ord
+  ord -->|"order tracking (Bearer token)"| attr
 ```
 
 ## Key concepts

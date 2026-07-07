@@ -5,14 +5,8 @@ title: "App SDK"
 The Whatmore App SDK renders Whatmore's shoppable-video surfaces **natively** inside your
 app. It is **commerce-agnostic**: the SDK renders the experience and emits events through a
 single delegate / callbacks object — **your app owns the cart, checkout, navigation, and
-analytics**. This keeps the integration small and is why most of the work stays in the
-[Whatmore dashboard](/integrations/overview), not in your codebase.
-
-<Info>
-These pages document the **current** SDK interfaces. The native SDKs are being rebuilt
-(Swift / Kotlin / React Native); treat the signatures as a reference — they may evolve, and
-the docs will be updated to match.
-</Info>
+analytics**. This keeps the integration small; most of the work stays in the
+[Whatmore dashboard](https://dashboard.whatmore.live/), not in your codebase.
 
 ## Surfaces
 
@@ -27,11 +21,15 @@ and event model:
 
 ## Platforms
 
+Every platform exposes the **same fingerprint** — the same surfaces, the same configuration
+object, the same event delegate, and the same product/event models — so an integration
+learned on one platform transfers directly to the others.
+
 | Platform | Package | Status |
 | -------- | ------- | ------ |
 | **[iOS (Swift)](/integrations/sdk-ios)** | `WhatmoreReels` (Swift Package) | Available |
+| **[Android (Kotlin)](/integrations/sdk-android)** | `ai.whatmore:whatmore-reels` (Gradle) | Available |
 | **[React Native](/integrations/sdk-react-native)** | `@whatmore-repo/whatmore-reactnative-sdk` | Available |
-| **[Android (Kotlin)](/integrations/sdk-android)** | — | Planned |
 
 ## The integration model
 
@@ -39,19 +37,28 @@ Every surface takes the **same configuration** (your Whatmore store id + theme) 
 user actions through the **same event hooks**. You wire those hooks once and reuse them
 across surfaces.
 
-```
-  Whatmore SDK (renders)            Your app (owns commerce)
-  ──────────────────────            ────────────────────────
-  video surface                     ── add to cart  ─────►  your cart
-  product tile / CTA / like    ──►  ── open product ─────►  your PDP / router
-  (emits events)                    ── on purchase  ─────►  Order Tracking → Whatmore
+```mermaid
+flowchart LR
+  subgraph sdk["Whatmore SDK — renders"]
+    surf["Video surface<br/>Reel / Feed / Carousel"]
+  end
+  subgraph app["Your app — owns commerce"]
+    cart["Your cart"]
+    pdp["Your PDP / router"]
+    ot["Order Tracking"]
+  end
+  surf -->|"add to cart"| cart
+  surf -->|"tap product / CTA"| pdp
+  surf -->|"purchase completes"| ot
+  ot --> attr[("Whatmore attribution")]
 ```
 
 - **Configure once** — a store id, optional theme, and a product provider.
 - **Handle events** — add-to-cart, product tap, CTA, like/save/share. The SDK never touches
   a cart, so you decide what each event does.
 - **Attribute purchases** — capture the products surfaced by the SDK and include them on the
-  [Order Tracking](/integrations/order-tracking) call at checkout, so Whatmore can credit the video.
+  [Order Tracking](/integrations/order-tracking) call at checkout, so Whatmore can credit the
+  video.
 
-Pick your platform to see the exact interface: **[iOS](/integrations/sdk-ios)** ·
-**[React Native](/integrations/sdk-react-native)** · **[Android](/integrations/sdk-android)**.
+Pick your platform for the full interface: **[iOS](/integrations/sdk-ios)** ·
+**[Android](/integrations/sdk-android)** · **[React Native](/integrations/sdk-react-native)**.

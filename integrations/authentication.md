@@ -31,7 +31,7 @@ A missing or invalid token is rejected with **HTTP 401**.
 ## Base URL
 
 The API base URL is **`https://api.whatmore.live`**. You manage your store, videos, and
-integration settings in the dashboard at **`https://dashboard.whatmore.live`**.
+integration settings in the dashboard at **[dashboard.whatmore.live](https://dashboard.whatmore.live/)**.
 
 Each environment issues its own `store_id` / token, so integration testing never touches
 live data.

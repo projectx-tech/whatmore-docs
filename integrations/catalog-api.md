@@ -15,7 +15,7 @@ happen in the dashboard.
 
 ## Connect in the dashboard (recommended)
 
-In [dashboard.whatmore.live](https://dashboard.whatmore.live), choose your platform and
+In [dashboard.whatmore.live](https://dashboard.whatmore.live/), choose your platform and
 provide your **product API** — an endpoint that returns a single product's detail, plus any
 auth it needs. Whatmore fetches a sample response and you **map your fields** to Whatmore's:
 
@@ -44,7 +44,7 @@ guide for the exact endpoint and credentials:
 - Whatmore also assigns its own internal numeric `product_id`, returned in responses.
 
 <Info>
-**Video & media are managed in the Whatmore dashboard — there is no upload API to
+**Video & media are managed in the [Whatmore dashboard](https://dashboard.whatmore.live/) — there is no upload API to
 integrate.** You upload, trim, and tag videos in the dashboard; your only catalog job is
 making product data available. This is deliberate: less to build on your side, faster
 go-live.

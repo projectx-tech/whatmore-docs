@@ -6,10 +6,6 @@ title: "iOS SDK (Swift)"
 templates (Reel, Feed, Carousel) that share the same configuration and delegate. SwiftUI +
 AVFoundation, no third-party dependencies; works in both UIKit and SwiftUI hosts.
 
-<Info>
-Current interface — the SDK is being rebuilt. Signatures may change.
-</Info>
-
 ## Requirements
 
 | | Minimum |

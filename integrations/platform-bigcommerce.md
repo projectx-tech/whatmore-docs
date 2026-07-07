@@ -15,7 +15,7 @@ curl "https://api.bigcommerce.com/stores/STORE_HASH/v3/catalog/products/PRODUCT_
   -H "X-Auth-Token: <bigcommerce_api_token>"
 ```
 
-In [dashboard.whatmore.live](https://dashboard.whatmore.live) select **BigCommerce**, enter
+In [dashboard.whatmore.live](https://dashboard.whatmore.live/) select **BigCommerce**, enter
 the endpoint + token, and map fields to Whatmore's (title, `client_product_id`, price,
 compare-at, product URL, image) — see
 [Catalog API → Connect in the dashboard](/integrations/catalog-api#connect-in-the-dashboard-recommended).

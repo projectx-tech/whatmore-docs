@@ -2,43 +2,185 @@
 title: "Android SDK (Kotlin)"
 ---
 
-<Warning>
-**Planned.** The native Android (Kotlin) SDK is on the roadmap. This page documents the
-intended interface so Android teams can plan; it is confirmed and updated when the SDK
-ships.
-</Warning>
+`whatmore-reels` — drop-in shoppable video for Android. One dependency, three ready-to-embed
+templates (Reel, Feed, Carousel) that share the same configuration and listener. Available
+for both **Views/Fragments** and **Jetpack Compose** hosts. It mirrors the
+[iOS SDK](/integrations/sdk-ios) surface-for-surface.
 
-## What to expect
+## Requirements
 
-The Android SDK will mirror the [iOS SDK](/integrations/sdk-ios) model so the integration is consistent
-across platforms:
+| | Minimum |
+| --- | --- |
+| Android | API 24 (Android 7.0) |
+| Kotlin | 1.9 |
+| UI | AndroidX Views **or** Jetpack Compose |
 
-- The same **surfaces** — Reel (full-screen swipe), Feed (creator page), Carousel
-  (autoplaying rail).
-- A single **configuration** object (your Whatmore store id + theme), built once and reused.
-- A single **listener / delegate** for events (add-to-cart, product tap, view-all-products,
-  CTA, like/save/share) — the SDK stays commerce-agnostic; **your app owns the cart,
-  checkout, and navigation**.
-- The same **models** for product and event data.
-
-Intended shape (subject to change):
+## Install (Gradle)
 
 ```kotlin
-// Illustrative — final Kotlin API confirmed at release
-val config = WhatmoreReelsConfiguration(storeId = "STRNZFBL8TQ")
+// build.gradle.kts
+dependencies {
+    implementation("ai.whatmore:whatmore-reels:1.0.0")
+}
+```
 
-WhatmoreReelsView(context).apply {
-    configure(config)
-    listener = object : WhatmoreReelsListener {
-        override fun onTapAddToCart(product: WhatmoreProduct, event: WhatmoreEvent) { /* your cart */ }
-        override fun onTapProduct(product: WhatmoreProduct, event: WhatmoreEvent) { /* your PDP */ }
-        // …like / save / share / CTA / viewAllProducts
+## Configure once
+
+Build the config and your listener once, then reuse them across every surface:
+
+```kotlin
+import ai.whatmore.reels.*
+
+val config = WhatmoreReelsConfiguration(storeId = "STRNZFBL8TQ")
+val whatmore = AppWhatmoreListener()   // your WhatmoreReelsListener
+```
+
+```kotlin
+data class WhatmoreReelsConfiguration(
+    val storeId: String,                                   // required — your Whatmore store id
+    val statuses: List<String> = listOf("live", "upcoming"),
+    val theme: WhatmoreReelsTheme = WhatmoreReelsTheme.Default,
+    val productProvider: ProductProvider = MockProductProvider()
+)
+```
+
+## Surfaces
+
+### Reel — full-screen swipe (e.g. a "TV" tab)
+
+```kotlin
+// View
+val reel = WhatmoreReelsView(context).apply {
+    configure(config, startIndex = 0)
+    listener = whatmore
+}
+
+// Fragment
+val fragment = WhatmoreReelsFragment.newInstance(config, startIndex = 0).apply {
+    listener = whatmore
+}
+```
+
+```kotlin
+// Jetpack Compose
+WhatmoreReels(configuration = config, startIndex = 0, listener = whatmore)
+```
+
+### Feed — creator / celebrity page
+
+```kotlin
+// View / Fragment
+WhatmoreFeedFragment.newInstance(config, celebrityName = celebrity.name).apply {
+    listener = whatmore
+}
+
+// Compose
+WhatmoreFeed(configuration = config, celebrityName = celebrity.name, listener = whatmore)
+```
+
+### Carousel — autoplaying rail
+
+```kotlin
+// View
+WhatmoreCarouselView(context).apply {
+    configure(config, title = "Trending Videos")   // title optional
+    listener = whatmore
+}
+
+// Compose
+WhatmoreCarousel(configuration = config, title = "Trending Videos", listener = whatmore)
+```
+
+Fully-visible cards autoplay muted; tapping opens the Reel at that video (the surface manages
+its own full-screen presentation).
+
+## Handle events — `WhatmoreReelsListener`
+
+Implement once and attach to every surface. **Every method has a default no-op** — the SDK
+never touches a cart, so you decide what each event does.
+
+```kotlin
+interface WhatmoreReelsListener {
+    fun onTapAddToCart(product: WhatmoreProduct, event: WhatmoreEvent) {}
+    fun onTapProduct(product: WhatmoreProduct, event: WhatmoreEvent) {}
+    fun onTapViewAllProducts(event: WhatmoreEvent) {}
+    fun onTapCTA(url: Uri, event: WhatmoreEvent) {}
+    fun onToggleLike(isLiked: Boolean, event: WhatmoreEvent) {}
+    fun onToggleSave(isSaved: Boolean, event: WhatmoreEvent) {}
+    fun onTapShare(event: WhatmoreEvent) {}
+}
+```
+
+| Method | Fires from | Meaning |
+| ------ | ---------- | ------- |
+| `onTapAddToCart` | Reel, Feed | "Add to cart" on a product tile |
+| `onTapProduct` | Reel, Feed | product tile tapped (open PDP) |
+| `onTapViewAllProducts` | Feed | "View All Products" tapped |
+| `onTapCTA` | Reel | event call-to-action link tapped |
+| `onToggleLike` | Reel, Feed | like toggled |
+| `onToggleSave` | Feed | save / bookmark toggled |
+| `onTapShare` | Reel, Feed | share tapped (SDK also presents a share sheet) |
+
+```kotlin
+class AppWhatmoreListener : WhatmoreReelsListener {
+    override fun onTapAddToCart(product: WhatmoreProduct, event: WhatmoreEvent) {
+        Cart.add(productId = product.id)
+    }
+    override fun onTapProduct(product: WhatmoreProduct, event: WhatmoreEvent) {
+        Router.openPdp(product.id)
     }
 }
 ```
 
-For attribution, capture the product / event from the listener callbacks and include them on
-your [Order Tracking](/integrations/order-tracking) call at checkout — same as iOS and React Native.
+For **attribution**, record `product.id` / `event.eventId` from these callbacks and include
+them on your [Order Tracking](/integrations/order-tracking) call at checkout.
 
-Until this ships, Android apps can integrate via the
-[React Native SDK](/integrations/sdk-react-native) where a React Native layer is available.
+## Models
+
+```kotlin
+data class WhatmoreProduct(
+    val id: String,
+    val imageUrl: Uri?,
+    val title: String,
+    val price: BigDecimal,
+    val comparePrice: BigDecimal?,     // struck-through / original price
+    val currencyCode: String           // ISO 4217, e.g. "INR"
+) {
+    val priceText: String              // localized, e.g. "₹1,299"
+    val comparePriceText: String?      // localized, null when no comparePrice
+}
+
+data class WhatmoreEvent(
+    val eventId: Int,
+    val brand: String?,
+    val videoUrl: Uri?,
+    val posterImageUrl: Uri?,
+    val likeCount: Int,
+    val shareCount: Int,
+    val ctaUrl: Uri?,
+    val pageId: Int
+)
+```
+
+## Theme
+
+```kotlin
+data class WhatmoreReelsTheme(
+    val accent: Color = Color.White,       // primary action tint
+    val likeActive: Color = Color.Red      // liked-heart tint
+) {
+    companion object { val Default = WhatmoreReelsTheme() }
+}
+```
+
+## Product data — `ProductProvider`
+
+Products render in the bottom carousels via a provider. The SDK ships `MockProductProvider`
+(the default) so all surfaces are demoable before product tagging is wired up. Supply your
+own to render live catalog data — no UI changes required.
+
+```kotlin
+interface ProductProvider {
+    suspend fun products(event: WhatmoreEvent): List<WhatmoreProduct>
+}
+```

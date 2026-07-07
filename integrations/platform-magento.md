@@ -16,7 +16,7 @@ curl https://yourstore.com/rest/V1/products/SKU \
   -H "Authorization: Bearer <magento_integration_token>"
 ```
 
-In [dashboard.whatmore.live](https://dashboard.whatmore.live) select **Magento**, enter the
+In [dashboard.whatmore.live](https://dashboard.whatmore.live/) select **Magento**, enter the
 endpoint + token, and map fields to Whatmore's (title, `client_product_id`, price,
 compare-at, product URL, image) — see
 [Catalog API → Connect in the dashboard](/integrations/catalog-api#connect-in-the-dashboard-recommended).

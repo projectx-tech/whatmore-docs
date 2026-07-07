@@ -8,7 +8,7 @@ integration and uses the [Core APIs](/integrations/authentication) plus the dash
 
 ## 1. Create your store in the dashboard
 
-Sign in at [dashboard.whatmore.live](https://dashboard.whatmore.live), choose **Shoppable
+Sign in at [dashboard.whatmore.live](https://dashboard.whatmore.live/), choose **Shoppable
 Videos**, and select **Custom** as the store type.
 
 ## 2. Connect your catalog

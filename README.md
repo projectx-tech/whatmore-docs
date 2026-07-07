@@ -1,6 +1,6 @@
 # Whatmore Documentation
 
-Technical documentation for integrating Whatmore's shoppable-video and live-shopping
+Technical documentation for integrating Whatmore's shoppable-video
 platform into your storefront — native mobile apps, custom / headless sites, and the major
 commerce platforms (Shopify, Magento / Adobe Commerce, Salesforce Commerce Cloud,
 WooCommerce, BigCommerce).

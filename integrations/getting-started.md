@@ -18,7 +18,7 @@ and send it on every API call. See [Authentication](/integrations/authentication
 ## 2. Environments
 
 The API base URL is `https://api.whatmore.live`; the dashboard is at
-`https://dashboard.whatmore.live`. Production and staging issue **separate `store_id`s and
+[dashboard.whatmore.live](https://dashboard.whatmore.live/). Production and staging issue **separate `store_id`s and
 tokens**, so integration testing never touches live data.
 
 ## 3. Integration checklist

@@ -26,7 +26,7 @@ curl https://yourstore.com/wp-json/wc/v3/products/PRODUCT_ID \
 
 **b. Map fields in the dashboard**
 
-In [dashboard.whatmore.live](https://dashboard.whatmore.live) select **WooCommerce**, enter
+In [dashboard.whatmore.live](https://dashboard.whatmore.live/) select **WooCommerce**, enter
 your endpoint + keys, and map the fields Whatmore fetches from a sample response (see
 [Catalog API → Connect in the dashboard](/integrations/catalog-api#connect-in-the-dashboard-recommended)):
 

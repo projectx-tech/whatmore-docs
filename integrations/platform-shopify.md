@@ -21,7 +21,7 @@ Once installed, the Whatmore Shopify app wires up everything automatically:
 - **Order tracking & attribution** — handled through Shopify's checkout / web-pixel
   integration; no manual [Order Tracking](/integrations/order-tracking) call.
 
-You manage videos, tagging, and campaigns in the **Whatmore dashboard**, exactly as with any
+You manage videos, tagging, and campaigns in the **[Whatmore dashboard](https://dashboard.whatmore.live/)**, exactly as with any
 other platform.
 
 ## When to use the APIs instead
